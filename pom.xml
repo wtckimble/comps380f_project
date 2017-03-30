@@ -15,7 +15,7 @@
         <spring.framework.version>4.3.7.RELEASE</spring.framework.version>
     </properties>
     
-    <dependencies>
+<dependencies>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
