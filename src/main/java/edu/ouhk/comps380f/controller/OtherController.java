@@ -6,10 +6,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
-public class IndexController {
+@RequestMapping("other")
+public class OtherController {
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ModelAndView showIndexPage() {
-        return new ModelAndView("index");
+    @RequestMapping(value = "")
+    public ModelAndView showOtherPage() {
+        return new ModelAndView("other");
     }
 }
