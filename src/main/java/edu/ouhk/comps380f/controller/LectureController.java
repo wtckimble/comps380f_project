@@ -13,9 +13,4 @@ public class LectureController {
     public ModelAndView showLecturePage() {
         return new ModelAndView("lecture");
     }
-    
-    @RequestMapping(value = "/download")
-    public ModelAndView showDownloadPage() {
-        return new ModelAndView("lab");
-    }
 }

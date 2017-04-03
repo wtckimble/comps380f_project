@@ -12,4 +12,9 @@ public class IndexController {
     public ModelAndView showIndexPage() {
         return new ModelAndView("index");
     }
+    
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public ModelAndView showLoginPage() {
+        return new ModelAndView("login");
+    }
 }

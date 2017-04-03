@@ -4,14 +4,32 @@
     Author     : EricYan
 --%>
 
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+
 <html>
+
     <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>This is register page</title>
+        <title>Register Page</title>
     </head>
+
+    <c:if test="${not empty existed}">
+        ${existed}
+    </c:if>
+    <br>
+    <c:if test="${not empty pwNotMatched}">
+        ${pwNotMatched}
+    </c:if>
+    <br>
     <body>
-        <h1>Hello Register!</h1>
+        <h2>Register</h2>
+        <form method="POST" modelAttribute="registerForm" />">
+            Username<br />
+            <input type="text" name="username" /><br /><br />
+            Password<br />
+            <input type="password" name="password" /><br /><br />
+            Confirm Password<br />
+            <input type="password" name="password2" /><br /><br />
+            <input type="submit" value="Register" />
+        </form>
     </body>
 </html>
