@@ -38,7 +38,7 @@ public class RegisterController {
         password = form.getPassword();
         password2 = form.getPassword2();
 
-        /*if(checkExisted(username)) {
+        if(checkExisted(username)) {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("existed", "Username existed.");
             return mav;
@@ -47,10 +47,8 @@ public class RegisterController {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("pmNotMatched", "Password is not match.");
             return mav;
-        } else {
+        } else
             addUser(username, password);
-        }*/
-        addUser(username, password);
         return success;
     }
     
@@ -98,12 +96,12 @@ public class RegisterController {
         }
     }*/
 
-    /*public boolean checkExisted(String name) {
+    public boolean checkExisted(String name) {
         Connection conn;
         ResultSet rs;
         try {
             conn = dataSource.getConnection();
-            PreparedStatement ps = conn.prepareStatement("select * from user where username = ?;");
+            PreparedStatement ps = conn.prepareStatement("select * from users where username = ?");
             ps.setString(1, name);
             rs = ps.executeQuery();
             if(!rs.next())
@@ -112,21 +110,19 @@ public class RegisterController {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
-    }*/
+    }
     
-    public void addUser(String username, String password) {
+    public void addUser(String name, String pw) {
         Connection conn;
         try {
             conn = dataSource.getConnection();
-            PreparedStatement ps = conn.prepareStatement("insert into users (username, password) values ('eric', 'ericpw')");
-            System.out.println("ddddddddddddddddshkjghdfjkhgjoerhoghdkjhgkjdfhkjghdkjhgkjhdfkjgbkjdhfkjghkdjfchdgkjf");
-            //PreparedStatement ps2 = conn.prepareStatement("insert into user_roles (username, role) values (?, ROLE_USER);");
-            //ps.setString(1, username);
-            //ps.setString(2, password);
-            //ps2.setString(1, username);
+            PreparedStatement ps = conn.prepareStatement("insert into users (username, password) values (?, ?)");
+            PreparedStatement ps2 = conn.prepareStatement("insert into user_roles (username, role) values (?, 'ROLE_USER')");
+            ps.setString(1, name);
+            ps.setString(2, pw);
+            ps2.setString(1, name);
             ps.execute();
-            System.out.println("1234514675238764987398578476984908609458609830957892637645e126753");
-            //ps2.execute();
+            ps2.execute();
         } catch (SQLException ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
