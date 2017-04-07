@@ -12,6 +12,20 @@
         <title>This is lecture page</title>
     </head>
     <body>
-        <h1>Hello Lecture!</h1>
+        <h2>Lecture List</h2>
+        <a href="<c:url value="/lecture/create" />">Create a Ticket</a><br /><br />
+        <c:choose>
+            <c:when test="${fn:length(ticketDatabase) == 0}">
+                <i>There are no lectures in the system.</i>
+            </c:when>
+            <c:otherwise>
+                <c:forEach items="${ticketDatabase}" var="entry">
+                    Ticket ${entry.key}:
+                    <a href="<c:url value="/lecture/view/${entry.key}" />">
+                        <c:out value="${entry.value.subject}" /></a>
+                    (customer: <c:out value="${entry.value.customerName}" />)<br />
+                </c:forEach>
+            </c:otherwise>
+        </c:choose>
     </body>
 </html>
