@@ -118,11 +118,11 @@ public class RegisterController {
         Connection conn;
         try {
             conn = dataSource.getConnection();
-            PreparedStatement ps = conn.prepareStatement("insert into users (username, password) values ('eric', 'ericpw')");
+            PreparedStatement ps = conn.prepareStatement("insert into users (username, password) values ('?', '?')");
             System.out.println("ddddddddddddddddshkjghdfjkhgjoerhoghdkjhgkjdfhkjghdkjhgkjhdfkjgbkjdhfkjghkdjfchdgkjf");
             //PreparedStatement ps2 = conn.prepareStatement("insert into user_roles (username, role) values (?, ROLE_USER);");
-            //ps.setString(1, username);
-            //ps.setString(2, password);
+            ps.setString(1, username);
+            ps.setString(2, password);
             //ps2.setString(1, username);
             ps.execute();
             System.out.println("1234514675238764987398578476984908609458609830957892637645e126753");
