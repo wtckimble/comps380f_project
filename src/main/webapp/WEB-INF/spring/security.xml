@@ -9,11 +9,12 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     
     <http auto-config="true">
         <intercept-url pattern="/**/download" access="hasAnyRole('USER', 'ADMIN')" />
-        <intercept-url pattern="/**/reply" access="hasAnyRole('User', 'ADMIN')" />
+        <intercept-url pattern="/**/reply" access="hasAnyRole('USER', 'ADMIN')" />
         <form-login login-page="/login"
                     authentication-failure-url="/login?error"
                     username-parameter="username"
                     password-parameter="password" />
+        <csrf/>
     </http>     
     
     <b:bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">

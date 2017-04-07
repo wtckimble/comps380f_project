@@ -1,40 +1,59 @@
 package edu.ouhk.comps380f.controller;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.Properties;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import sun.util.logging.resources.logging;
 
 @Controller
+@Repository
 @RequestMapping("register")
 public class RegisterController {
-
-    public Connection conn;
+    @Autowired
+    public DataSource dataSource;
+    //public Connection conn;
     public Statement stmt;
+
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView showRegisterPage() {
         return new ModelAndView("register", "registerForm", new RegisterForm());
     }
 
- /*   @RequestMapping(value = "", method = RequestMethod.POST)
+    @RequestMapping(value = "", method = RequestMethod.POST)
     public ModelAndView showRegisterResult(RegisterForm form) {
-        ModelAndView mav = new ModelAndView();
+        ModelAndView success = new ModelAndView("lecture");
         String username, password, password2;
         username = form.getUsername();
         password = form.getPassword();
         password2 = form.getPassword2();
 
-        if (!password.equals(password2)) {
-            mav.addObject("pmNotMatched", "Password is not match.");
+        /*if(checkExisted(username)) {
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("existed", "Username existed.");
+            return mav;
         }
-
-    } */
-
+        else if (!password.equals(password2)) {
+            ModelAndView mav = new ModelAndView("register");
+            mav.addObject("pmNotMatched", "Password is not match.");
+            return mav;
+        } else {
+            addUser(username, password);
+        }*/
+        addUser(username, password);
+        return success;
+    }
+    
     public static class RegisterForm {
 
         private String username;
@@ -67,7 +86,7 @@ public class RegisterController {
         }
     }
 
-    public void dbConnection() {
+    /*public void dbConnection() {
         try {
             String dbURL = "jdbc:derby://localhost:1527/Account";
             conn = DriverManager.getConnection(dbURL);
@@ -76,6 +95,40 @@ public class RegisterController {
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        }
+    }*/
+
+    /*public boolean checkExisted(String name) {
+        Connection conn;
+        ResultSet rs;
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement("select * from user where username = ?;");
+            ps.setString(1, name);
+            rs = ps.executeQuery();
+            if(!rs.next())
+                return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }*/
+    
+    public void addUser(String username, String password) {
+        Connection conn;
+        try {
+            conn = dataSource.getConnection();
+            PreparedStatement ps = conn.prepareStatement("insert into users (username, password) values ('eric', 'ericpw')");
+            System.out.println("ddddddddddddddddshkjghdfjkhgjoerhoghdkjhgkjdfhkjghdkjhgkjhdfkjgbkjdhfkjghkdjfchdgkjf");
+            //PreparedStatement ps2 = conn.prepareStatement("insert into user_roles (username, role) values (?, ROLE_USER);");
+            //ps.setString(1, username);
+            //ps.setString(2, password);
+            //ps2.setString(1, username);
+            ps.execute();
+            System.out.println("1234514675238764987398578476984908609458609830957892637645e126753");
+            //ps2.execute();
+        } catch (SQLException ex) {
+            Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
