@@ -29,7 +29,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    
+
     private DataSource dataSource;
     private JdbcOperations jdbcOp;
 
@@ -50,7 +50,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
     }
 
-   /* @Override
+    /* @Override
     public void create(User user) {
         Connection conn = null;
         PreparedStatement stmt = null;
@@ -75,15 +75,12 @@ public class UserRepositoryImpl implements UserRepository {
             }
         }
     }*/
-
     @Override
     public void create(User user) {
-        jdbcOp.update("insert into users (username, password) values (?, ?)", user.getUsername(), user.getPassword() );
-        for (String role : user.getRoles()) {
-            jdbcOp.update("insert into user_roles (username, role) values (?, ?)", user.getUsername(), role);
-        }
+        jdbcOp.update("insert into users (username, password) values (?, ?)", user.getUsername(), user.getPassword());
+        jdbcOp.update("insert into user_roles (username, role) values (?, 'ROLE_USER')", user.getUsername());
     }
-    
+
     @Override
     public List<User> findAll() {
         List<User> users = new ArrayList<>();
@@ -101,6 +98,18 @@ public class UserRepositoryImpl implements UserRepository {
             users.add(user);
         }
         return users;
+    }
+
+    public boolean isUserExists(String username) {
+        String sql = "SELECT count(*) FROM USERS WHERE username = ?";
+        boolean result = false;
+        
+        int count = jdbcOp.queryForObject(
+                sql, new Object[]{username}, Integer.class);
+        if (count > 0) {
+            result = true;
+        }
+        return result;
     }
 
     /*@Override

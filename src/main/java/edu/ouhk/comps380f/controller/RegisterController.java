@@ -42,11 +42,11 @@ public class RegisterController {
         password = form.getPassword();
         password2 = form.getPassword2();
 
-        /*if(checkExisted(username) == 1) {
+        if(userRepo.isUserExists(username)) {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("existed", "Username existed.");
             return mav;
-        } else*/ if (!password.equals(password2)) {
+        } else if (!password.equals(password2)) {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("pwNotMatched", "Password is not match.");
             return mav;
