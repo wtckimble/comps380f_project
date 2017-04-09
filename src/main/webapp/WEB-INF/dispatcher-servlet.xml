@@ -30,4 +30,6 @@
         <property name="prefix" value="/WEB-INF/jsp/view/" />
         <property name="suffix" value=".jsp" />
     </bean> 
+    
+    <bean id="userRepo" class="edu.ouhk.comps380f.dao.UserRepositoryImpl" />
 </beans>

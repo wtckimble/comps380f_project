@@ -1,5 +1,7 @@
 package edu.ouhk.comps380f.controller;
 
+import edu.ouhk.comps380f.dao.UserRepository;
+import edu.ouhk.comps380f.model.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,8 +24,10 @@ import sun.util.logging.resources.logging;
 public class RegisterController {
     @Autowired
     public DataSource dataSource;
-    //public Connection conn;
     public Statement stmt;
+    
+    @Autowired
+    UserRepository userRepo;
 
     @RequestMapping(value = "", method = RequestMethod.GET)
     public ModelAndView showRegisterPage() {
@@ -38,17 +42,20 @@ public class RegisterController {
         password = form.getPassword();
         password2 = form.getPassword2();
 
-        if(checkExisted(username)) {
+        /*if(checkExisted(username) == 1) {
             ModelAndView mav = new ModelAndView("register");
             mav.addObject("existed", "Username existed.");
             return mav;
-        }
-        else if (!password.equals(password2)) {
+        } else*/ if (!password.equals(password2)) {
             ModelAndView mav = new ModelAndView("register");
-            mav.addObject("pmNotMatched", "Password is not match.");
+            mav.addObject("pwNotMatched", "Password is not match.");
             return mav;
-        } else
-            addUser(username, password);
+        } else {
+            User user = new User();
+            user.setUsername(username);
+            user.setPassword(password);
+            userRepo.create(user);
+        }
         return success;
     }
     
@@ -84,32 +91,22 @@ public class RegisterController {
         }
     }
 
-    /*public void dbConnection() {
-        try {
-            String dbURL = "jdbc:derby://localhost:1527/Account";
-            conn = DriverManager.getConnection(dbURL);
-            if (conn != null) {
-                System.out.println("Connected to Account");
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-    }*/
-
-    public boolean checkExisted(String name) {
+    public int checkExisted(String name) {
         Connection conn;
         ResultSet rs;
+        int count = 0;
         try {
             conn = dataSource.getConnection();
-            PreparedStatement ps = conn.prepareStatement("select * from users where username = ?");
+            PreparedStatement ps = conn.prepareStatement("select  count(*) as count from users where username = ?");
             ps.setString(1, name);
             rs = ps.executeQuery();
-            if(!rs.next())
-                return true;
+            while(rs.next())
+                count = rs.getInt("count");
+            rs.close();
         } catch (SQLException ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return false;
+        }        
+        return count;
     }
     
     public void addUser(String name, String pw) {
