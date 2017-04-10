@@ -17,7 +17,7 @@
         <a href="<c:url value="/lecture/create" />">Create a Lecture Topic</a><br /><br />
         <c:choose>
             <c:when test="${fn:length(lecturelist) == 0}">
-                <i>There are no lectures in the system.</i>
+                <i>Sorry, there are no lectures in the system.</i>
             </c:when>
             <c:otherwise>
                 
