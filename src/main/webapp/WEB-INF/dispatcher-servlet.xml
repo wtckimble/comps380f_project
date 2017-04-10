@@ -12,6 +12,7 @@
 
     <mvc:annotation-driven />
     
+    
     <context:component-scan base-package="edu.ouhk.comps380f.controller, edu.ouhk.comps380f.dao" />
 
     <bean id="multipartResolver"
