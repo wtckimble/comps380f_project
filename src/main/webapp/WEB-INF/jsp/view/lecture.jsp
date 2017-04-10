@@ -12,7 +12,17 @@
         <title>This is lecture page</title>
     </head>
     <body>
-            Welcome, ${username}
+        <c:choose>
+            <c:when test="!not empty ${}username}">
+                Welcome, ${username}  <a href=<c:out
+            </c:when>
+            <c:when test="${condition2}">
+                ...
+            </c:when>
+            <c:otherwise>
+                ...
+            </c:otherwise>
+        </c:choose> <br>
         <h2>Lecture List</h2>
         <a href="<c:url value="/lecture/create" />">Create a Ticket</a><br /><br />
         <c:choose>
