@@ -109,7 +109,7 @@ public class RegisterController {
         return count;
     }
     
-    public void addUser(String name, String pw) {
+    /*public void addUser(String name, String pw) {
         Connection conn;
         try {
             conn = dataSource.getConnection();
@@ -123,5 +123,5 @@ public class RegisterController {
         } catch (SQLException ex) {
             Logger.getLogger(RegisterController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+    }*/
 }

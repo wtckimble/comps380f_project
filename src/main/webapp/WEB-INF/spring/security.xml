@@ -15,6 +15,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     </b:bean>
     
     <b:bean id="userRepo" class="edu.ouhk.comps380f.dao.UserRepositoryImpl" />
+    <b:bean id="lectureRepo" class="edu.ouhk.comps380f.dao.LectureRepositoryImpl" />
     
     <authentication-manager>
         <authentication-provider>
