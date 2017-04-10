@@ -4,9 +4,12 @@ import edu.ouhk.comps380f.model.Attachment;
 import edu.ouhk.comps380f.model.Lecture;
 import edu.ouhk.comps380f.view.DownloadingView;
 import java.io.IOException;
+import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +28,11 @@ public class LectureController {
     private Map<Long, Lecture> ticketDatabase = new LinkedHashMap<>();
 
     @RequestMapping(value = {"", "lecture"}, method = RequestMethod.GET)
-    public String list(ModelMap model) {
-        model.addAttribute("ticketDatabase", ticketDatabase);
-        return "lecture";
+    public ModelAndView list(Principal principal) {
+        ModelAndView mav = new ModelAndView("lecture");
+        mav.addObject("ticketDatabase", ticketDatabase);
+        mav.addObject("username", principal.getName());
+        return mav;
     }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)

@@ -12,6 +12,7 @@
         <title>This is lecture page</title>
     </head>
     <body>
+            Welcome, ${username}
         <h2>Lecture List</h2>
         <a href="<c:url value="/lecture/create" />">Create a Ticket</a><br /><br />
         <c:choose>
