@@ -39,12 +39,13 @@ public class LectureController {
     
     private volatile long TICKET_ID_SEQUENCE = 1;
     private Map<Long, Lecture> ticketDatabase = new LinkedHashMap<>();
-
+    
     @RequestMapping(value = {"", "lecture"}, method = RequestMethod.GET)
-    public ModelAndView list(Principal principal) {
+    public ModelAndView listForUser(Principal principal) {
         ModelAndView mav = new ModelAndView("lecture");
         mav.addObject("ticketDatabase", ticketDatabase);
-        mav.addObject("username", principal.getName());
+        //if(principal.getName() != null)
+        //mav.addObject("username", principal.getName());
         return mav;
     }
 

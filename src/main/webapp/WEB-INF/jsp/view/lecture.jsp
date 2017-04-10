@@ -13,14 +13,16 @@
     </head>
     <body>
         <c:choose>
-            <c:when test="!not empty ${}username}">
-                Welcome, ${username}  <a href=<c:out
-            </c:when>
-            <c:when test="${condition2}">
-                ...
+            <c:when test="${not empty username}">
+                Welcome, ${username}  <c:url var="logoutUrl" value="/logout"/>
+                <form action="${logoutUrl}" method="post">
+                    <input type="submit" value="Log out" />
+                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+                </form>
             </c:when>
             <c:otherwise>
-                ...
+                <a href="<c:url value="/login" />">Login</a>   
+                <a href="<c:url value="/register" />">Register</a>
             </c:otherwise>
         </c:choose> <br>
         <h2>Lecture List</h2>

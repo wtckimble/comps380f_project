@@ -7,6 +7,6 @@
         <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
         <input name="submit" type="submit" value="Log In" /><br />
     </form>
-        <a href="/register">Register</a><br>
+        <a href="<c:url value="/register" />">Register</a><br>
     </body>
 </html>
