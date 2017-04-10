@@ -6,11 +6,14 @@ import edu.ouhk.comps380f.model.Lecture;
 import edu.ouhk.comps380f.view.DownloadingView;
 import java.io.IOException;
 import java.sql.Statement;
+import java.security.Principal;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import javax.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.ModelMap;
@@ -38,9 +41,11 @@ public class LectureController {
     private Map<Long, Lecture> ticketDatabase = new LinkedHashMap<>();
 
     @RequestMapping(value = {"", "lecture"}, method = RequestMethod.GET)
-    public String list(ModelMap model) {
-        model.addAttribute("ticketDatabase", ticketDatabase);
-        return "lecture";
+    public ModelAndView list(Principal principal) {
+        ModelAndView mav = new ModelAndView("lecture");
+        mav.addObject("ticketDatabase", ticketDatabase);
+        mav.addObject("username", principal.getName());
+        return mav;
     }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
@@ -102,9 +107,9 @@ public class LectureController {
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public View create(Form form) {
+    public View create(Form form, Principal principal) {
         Lecture ticket = new Lecture();
-        ticket.setCustomerName("test");
+        ticket.setCustomerName(principal.getName());
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
         
