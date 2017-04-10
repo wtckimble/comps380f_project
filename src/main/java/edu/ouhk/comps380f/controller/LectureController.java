@@ -1,13 +1,18 @@
 package edu.ouhk.comps380f.controller;
 
+import edu.ouhk.comps380f.dao.LectureRepository;
 import edu.ouhk.comps380f.model.Attachment;
 import edu.ouhk.comps380f.model.Lecture;
 import edu.ouhk.comps380f.view.DownloadingView;
 import java.io.IOException;
+import java.sql.Statement;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.sql.DataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Repository;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +22,17 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
+
 @Controller
+@Repository
 @RequestMapping("lecture")
 public class LectureController {
+    @Autowired
+    public DataSource dataSource;
+    public Statement stmt;
+    
+    @Autowired
+    LectureRepository lectureRepo;
     
     private volatile long TICKET_ID_SEQUENCE = 1;
     private Map<Long, Lecture> ticketDatabase = new LinkedHashMap<>();
@@ -46,6 +59,7 @@ public class LectureController {
     public ModelAndView create() {
         return new ModelAndView("add", "ticketForm", new Form());
     }
+    
 
     public static class Form {
 
@@ -88,14 +102,13 @@ public class LectureController {
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public View create(Form form) throws IOException {
+    public View create(Form form) {
         Lecture ticket = new Lecture();
-        ticket.setId(this.getNextTicketId());
-        ticket.setCustomerName(form.getCustomerName());
+        ticket.setCustomerName("test");
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
-
-        for (MultipartFile filePart : form.getAttachments()) {
+        
+        /*for (MultipartFile filePart : form.getAttachments()) {
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
             attachment.setMimeContentType(filePart.getContentType());
@@ -104,8 +117,10 @@ public class LectureController {
                     && attachment.getContents() != null && attachment.getContents().length > 0) {
                 ticket.addAttachment(attachment);
             }
-        }
-        this.ticketDatabase.put(ticket.getId(), ticket);
+        }*/
+        lectureRepo.create(ticket);
+
+        /*this.ticketDatabase.put(ticket.getId(), ticket);*/
         return new RedirectView("/lecture/view/" + ticket.getId(), true);
     }
 

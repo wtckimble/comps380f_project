@@ -14,14 +14,6 @@
     
     <context:component-scan base-package="edu.ouhk.comps380f.controller, edu.ouhk.comps380f.dao" />
 
-    <bean id="dataSource"
-          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-        <property name="driverClassName" value="org.apache.derby.jdbc.ClientDriver" />
-        <property name="url" value="jdbc:derby://localhost:1527/Account" />
-        <property name="username" value="nbuser" />
-        <property name="password" value="nbuser" />
-    </bean>
-
     <bean id="multipartResolver"
           class="org.springframework.web.multipart.support.StandardServletMultipartResolver"/>
 
@@ -32,4 +24,5 @@
     </bean> 
     
     <bean id="userRepo" class="edu.ouhk.comps380f.dao.UserRepositoryImpl" />
+    <bean id="lectureRepo" class="edu.ouhk.comps380f.dao.LectureRepositoryImpl" />
 </beans>
