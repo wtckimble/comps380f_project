@@ -43,8 +43,8 @@ public class LectureController {
     @RequestMapping(value = {"", "lecture"}, method = RequestMethod.GET)
     public ModelAndView list(Principal principal) {
         ModelAndView mav = new ModelAndView("lecture");
-        mav.addObject("ticketDatabase", ticketDatabase);
-        mav.addObject("username", principal.getName());
+        mav.addObject("lecturelist", lectureRepo.findAll());
+        //mav.addObject("username", principal.getName());
         return mav;
     }
 
@@ -137,6 +137,9 @@ public class LectureController {
             value = "/{ticketId}/attachment/{attachment:.+}",
             method = RequestMethod.GET
     )
+    
+    
+    
     public View download(@PathVariable("ticketId") long ticketId,
             @PathVariable("attachment") String name) {
         Lecture ticket = this.ticketDatabase.get(ticketId);

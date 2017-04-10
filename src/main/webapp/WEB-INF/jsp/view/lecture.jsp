@@ -16,16 +16,25 @@
         <h2>Lecture List</h2>
         <a href="<c:url value="/lecture/create" />">Create a Lecture Topic</a><br /><br />
         <c:choose>
-            <c:when test="${fn:length(ticketDatabase) == 0}">
+            <c:when test="${fn:length(lecturelist) == 0}">
                 <i>There are no lectures in the system.</i>
             </c:when>
             <c:otherwise>
-                <c:forEach items="${ticketDatabase}" var="entry">
-                    Ticket ${entry.key}:
-                    <a href="<c:url value="/lecture/view/${entry.key}" />">
-                        <c:out value="${entry.value.subject}" /></a>
-                    (customer: <c:out value="${entry.value.customerName}" />)<br />
+                
+                <c:forEach items="${lecturelist}" var="entry">
+                        ${entry.id}<br>
+                        <a href="<c:url value="/lecture/view/${entry.subject}"/>">
+                           <c:out value="${entry.subject}" /></a>
+                        <br/>
                 </c:forEach>
+                
+                 <%--         
+                <c:forEach items="${lecturelist}" var="entry">
+                    Lecture Topics ${entry.value}: <br/>
+                    <a href="<c:url value="/lecture/view/${entry.key}" />">
+                        <c:out value="${entry.value}" /></a>
+                </c:forEach>
+                        --%>
             </c:otherwise>
         </c:choose>
     </body>

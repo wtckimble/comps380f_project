@@ -6,12 +6,16 @@
 package edu.ouhk.comps380f.dao;
 
 import edu.ouhk.comps380f.model.Lecture;
-import edu.ouhk.comps380f.model.User;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,7 +33,15 @@ public class LectureRepositoryImpl implements LectureRepository{
         this.dataSource = dataSource;
         this.jdbcOp = new JdbcTemplate(this.dataSource);
     }
-
+    protected class ItemMapper implements RowMapper {  
+  
+        public Object mapRow(ResultSet rs, int rowNum) throws SQLException {  
+            Lecture lecture = new Lecture();  
+            lecture.setId(rs.getInt("topic_id"));    
+            lecture.setSubject(rs.getString("topic_title"));    
+            return lecture;  
+        }
+    }  
     /**
      *
      * @param lecture
@@ -43,7 +55,17 @@ public class LectureRepositoryImpl implements LectureRepository{
 
     @Override
     public List<Lecture> findAll() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Lecture> lectures = new ArrayList<>();
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic");
+        //String sql = "SELECT  topic_id, topic_title, topic_content, topic_author FROM topic";  
+        for (Map<String, Object> row : rows) {
+            Lecture lecture = new Lecture();
+            lecture.setId((int)row.get("topic_id"));
+            lecture.setSubject((String) row.get("topic_title"));
+            lectures.add(lecture);
+        }
+        return lectures;  
+        
     }
 
     @Override
@@ -55,8 +77,5 @@ public class LectureRepositoryImpl implements LectureRepository{
     public void deleteByLectureId(long id) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
-    
-    
-    
- 
+
 }

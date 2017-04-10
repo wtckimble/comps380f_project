@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class Lecture {
 
-    private long id;
+    private int id;
     private String customerName;
     private String subject;
     private String body;
@@ -16,7 +16,7 @@ public class Lecture {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
