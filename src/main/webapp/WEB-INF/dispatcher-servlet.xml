@@ -26,4 +26,5 @@
     
     <bean id="userRepo" class="edu.ouhk.comps380f.dao.UserRepositoryImpl" />
     <bean id="lectureRepo" class="edu.ouhk.comps380f.dao.LectureRepositoryImpl" />
+    <bean id="replyRepo" class="edu.ouhk.comps380f.dao.ReplyRepositoryImpl" />
 </beans>
