@@ -14,6 +14,7 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpRequest;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Repository;
 import org.springframework.ui.ModelMap;
@@ -25,26 +26,27 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
-
 @Controller
 @Repository
 @RequestMapping("lecture")
 public class LectureController {
+
     @Autowired
     public DataSource dataSource;
     public Statement stmt;
-    
+
     @Autowired
     LectureRepository lectureRepo;
-    
+
     private volatile long TICKET_ID_SEQUENCE = 1;
     private Map<Long, Lecture> ticketDatabase = new LinkedHashMap<>();
 
     @RequestMapping(value = {"", "lecture"}, method = RequestMethod.GET)
-    public ModelAndView list(Principal principal) {
+    public ModelAndView list(HttpServletRequest req, Principal principal) {
         ModelAndView mav = new ModelAndView("lecture");
         mav.addObject("lecturelist", lectureRepo.findAll());
-        //mav.addObject("username", principal.getName());
+        if(req.getUserPrincipal() != null)
+            mav.addObject("username", principal.getName());
         return mav;
     }
     @RequestMapping(value = "/lecture/reply/{ticketId}" , method = RequestMethod.GET)
@@ -173,17 +175,17 @@ public class LectureController {
         ticket.setCustomerName(principal.getName());
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
-        
+
         /*for (MultipartFile filePart : form.getAttachments()) {
-            Attachment attachment = new Attachment();
-            attachment.setName(filePart.getOriginalFilename());
-            attachment.setMimeContentType(filePart.getContentType());
-            attachment.setContents(filePart.getBytes());
-            if (attachment.getName() != null && attachment.getName().length() > 0
-                    && attachment.getContents() != null && attachment.getContents().length > 0) {
-                ticket.addAttachment(attachment);
-            }
-        }*/
+         Attachment attachment = new Attachment();
+         attachment.setName(filePart.getOriginalFilename());
+         attachment.setMimeContentType(filePart.getContentType());
+         attachment.setContents(filePart.getBytes());
+         if (attachment.getName() != null && attachment.getName().length() > 0
+         && attachment.getContents() != null && attachment.getContents().length > 0) {
+         ticket.addAttachment(attachment);
+         }
+         }*/
         lectureRepo.create(ticket);
 
         /*this.ticketDatabase.put(ticket.getId(), ticket);*/
@@ -198,9 +200,7 @@ public class LectureController {
             value = "/{ticketId}/attachment/{attachment:.+}",
             method = RequestMethod.GET
     )
-    
-    
-    
+
     public View download(@PathVariable("ticketId") long ticketId,
             @PathVariable("attachment") String name) {
         Lecture ticket = this.ticketDatabase.get(ticketId);

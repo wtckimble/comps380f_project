@@ -12,6 +12,17 @@
         <title>This is other page</title>
     </head>
     <body>
-        <h1>Hello Other!</h1>
-    </body>
+    <security:authorize access="isAuthenticated() ">
+        Welcome, <security:authentication property="principal.username" />   <c:url var="logoutUrl" value="/logout"/>
+        <form action="${logoutUrl}" method="post">
+            <input type="submit" value="Log out" />
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}"/>
+        </form>
+    </security:authorize>
+    <security:authorize access="isAnonymous()">
+        <a href="<c:url value="/login" />">Login</a>   
+        <a href="<c:url value="/register" />">Register</a>
+    </security:authorize><br><br>
+    <h1>Hello Other!</h1>
+</body>
 </html>
