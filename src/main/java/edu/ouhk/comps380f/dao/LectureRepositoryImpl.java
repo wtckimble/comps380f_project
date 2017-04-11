@@ -69,8 +69,18 @@ public class LectureRepositoryImpl implements LectureRepository{
     }
 
     @Override
-    public Lecture findByLectureId(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public Lecture findByLectureId(int id) {
+        Lecture lecture = new Lecture();
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT * FROM topic where topic_id = ? ", id);
+        for (Map<String, Object> row : rows) {
+            lecture.setId((int)row.get("topic_id"));
+            lecture.setSubject((String)row.get("topic_subject"));
+            lecture.setCustomerName((String)row.get("topic_author"));
+            lecture.setBody((String)row.get("topic_content"));         
+        }
+        System.out.println(lecture.getBody());
+        System.out.println(lecture.getSubject());
+        return lecture; 
     }
 
     @Override

@@ -49,14 +49,13 @@ public class LectureController {
     }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable("ticketId") long ticketId) {
-        Lecture ticket = this.ticketDatabase.get(ticketId);
+    public ModelAndView view(@PathVariable("ticketId") int ticketId) {
+        /*Lecture ticket = this.ticketDatabase.get(ticketId);
         if (ticket == null) {
-            return new ModelAndView(new RedirectView("/ticket/list", true));
-        }
+            return new ModelAndView(new RedirectView("/lecture", true));
+        }*/
         ModelAndView modelAndView = new ModelAndView("view");
-        modelAndView.addObject("ticketId", Long.toString(ticketId));
-        modelAndView.addObject("ticket", ticket);
+        modelAndView.addObject("lectureInfo", lectureRepo.findByLectureId(ticketId));
         return modelAndView;
     }
 
