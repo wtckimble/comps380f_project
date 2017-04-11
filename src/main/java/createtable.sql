@@ -51,6 +51,12 @@ INCREMENT BY 1),
 
 reply_content VARCHAR(50) NOT NULL,
 
-PRIMARY KEY (reply_id)
+reply_author VARCHAR(50) NOT NULL,
+
+topic_id INTEGER NOT NULL,
+
+PRIMARY KEY (reply_id),
+
+FOREIGN KEY (topic_id) REFERENCES topic(topic_id)
 
 );

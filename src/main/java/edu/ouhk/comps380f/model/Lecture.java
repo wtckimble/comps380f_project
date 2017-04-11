@@ -2,6 +2,7 @@ package edu.ouhk.comps380f.model;
 
 import java.util.Collection;
 import java.util.LinkedHashMap;
+import java.util.Locale;
 import java.util.Map;
 
 public class Lecture {
@@ -11,8 +12,17 @@ public class Lecture {
     private String subject;
     private String body;
     private Map<String, Attachment> attachments = new LinkedHashMap<>();
+    private String category = "lecture";
+    
+    public String getCategory(){
+        return category;
+    }
+    
+    public void setCategory(String category) {
+        this.category = category;
+    }
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 

@@ -35,7 +35,7 @@
                 
                 <c:forEach items="${lecturelist}" var="entry">
                         ${entry.id}<br>
-                        <a href="<c:url value="/lecture/view/${entry.subject}"/>">
+                        <a href="<c:url value="/lecture/view/${entry.id}"/>">
                            <c:out value="${entry.subject}" /></a>
                         <br/>
                 </c:forEach>

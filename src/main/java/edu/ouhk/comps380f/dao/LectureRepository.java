@@ -15,6 +15,6 @@ import java.util.List;
 public interface LectureRepository {
     public void create(Lecture lecture);
     public List<Lecture> findAll();
-    public Lecture findByLectureId(long id);
+    public Lecture findByLectureId(int id);
     public void deleteByLectureId(long id);
 }

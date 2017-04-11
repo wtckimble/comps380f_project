@@ -49,22 +49,84 @@ public class LectureController {
             mav.addObject("username", principal.getName());
         return mav;
     }
+    @RequestMapping(value = "/lecture/reply/{ticketId}" , method = RequestMethod.GET)
+    public ModelAndView reply(@PathVariable("ticketId") int ticketId) {
+        
+        ModelAndView modelAndView = new ModelAndView("reply");
+        modelAndView.addObject("ticketId", ticketId);
+        modelAndView.addObject("reply", new replyForm());
+        return modelAndView;
+   
+    }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
-    public ModelAndView view(@PathVariable("ticketId") long ticketId) {
-        Lecture ticket = this.ticketDatabase.get(ticketId);
-        if (ticket == null) {
-            return new ModelAndView(new RedirectView("/ticket/list", true));
-        }
+    public ModelAndView view(@PathVariable("ticketId") int ticketId) {
+    
         ModelAndView modelAndView = new ModelAndView("view");
-        modelAndView.addObject("ticketId", Long.toString(ticketId));
-        modelAndView.addObject("ticket", ticket);
+        modelAndView.addObject("lectureInfo", lectureRepo.findByLectureId(ticketId));
         return modelAndView;
     }
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public ModelAndView create() {
         return new ModelAndView("add", "ticketForm", new Form());
+    }
+    
+    /*@RequestMapping(value = "create", method = RequestMethod.POST)
+    public View reply(replyForm form, Principal principal) {
+        Lecture ticket = new Lecture();
+        ticket.setCustomerName(principal.getName());
+        ticket.setSubject(form.getSubject());
+        ticket.setBody(form.getBody());
+        
+        /*for (MultipartFile filePart : form.getAttachments()) {
+            Attachment attachment = new Attachment();
+            attachment.setName(filePart.getOriginalFilename());
+            attachment.setMimeContentType(filePart.getContentType());
+            attachment.setContents(filePart.getBytes());
+            if (attachment.getName() != null && attachment.getName().length() > 0
+                    && attachment.getContents() != null && attachment.getContents().length > 0) {
+                ticket.addAttachment(attachment);
+            }
+        }
+        lectureRepo.create(ticket);
+
+        /*this.ticketDatabase.put(ticket.getId(), ticket);
+        return new RedirectView("/lecture/view/" + ticket.getId(), true);
+    }*/
+    
+    
+    public static class replyForm{
+        
+        private String reply;
+        private String customerName;
+        private List<MultipartFile> attachments;
+        
+        public String getReply() {
+            return reply;
+        }
+
+        public void setReply(String reply) {
+            this.reply = reply;
+        }
+
+        public String getCustomerName() {
+            return customerName;
+        }
+
+        public void setCustomerName(String customerName) {
+            this.customerName = customerName;
+        }
+
+        public List<MultipartFile> getAttachments() {
+            return attachments;
+        }
+
+        public void setAttachments(List<MultipartFile> attachments) {
+            this.attachments = attachments;
+        }
+        
+        
     }
 
     public static class Form {
