@@ -36,7 +36,7 @@
                     <a href="<c:url value="/lecture/view/${entry.id}"/>">
                         <c:out value="${entry.subject}" /></a>  
                         <security:authorize access="hasRole('ROLE_ADMIN') ">
-                            <a href="<c:url value="/admin/delete/${entry.id}"/>">Delete</a>
+                            <a href="<c:url value="/lecture/delete/${entry.id}"/>">Delete</a>
                         </security:authorize>
                     <br/>
                 </c:forEach>

@@ -47,7 +47,7 @@ public class LectureController {
         mav.addObject("lecturelist", lectureRepo.findAll());
         return mav;
     }
-    
+                                                                    // Should be "reply/{ticketId}"?
     @RequestMapping(value = "/lecture/reply/{ticketId}" , method = RequestMethod.GET)
     public ModelAndView reply(@PathVariable("ticketId") int ticketId) {
         
@@ -71,7 +71,7 @@ public class LectureController {
         return new ModelAndView("add", "ticketForm", new Form());
     }
     
-    @RequestMapping(value = "admin/delete/{ticket_id}", method = RequestMethod.GET)
+    @RequestMapping(value = "delete/{ticketId}", method = RequestMethod.GET)
     public View deleteTopic(@PathVariable("ticketId") int ticketId) {
         lectureRepo.deleteByLectureId(ticketId);
         return new RedirectView("/lecture", true);

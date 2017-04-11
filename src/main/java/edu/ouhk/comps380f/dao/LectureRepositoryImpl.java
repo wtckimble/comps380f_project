@@ -85,7 +85,7 @@ public class LectureRepositoryImpl implements LectureRepository{
 
     @Override
     public void deleteByLectureId(int id) {
-        jdbcOp.update("delele from reply where topic_id = ?", id);
+        jdbcOp.update("delete from reply where topic_id = ?", id);
         jdbcOp.update("delete from topic where topic_id = ?", id);
     }
 }

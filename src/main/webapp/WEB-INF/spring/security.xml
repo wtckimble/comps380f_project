@@ -28,7 +28,7 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     <http auto-config="true">
         <intercept-url pattern="/**/download" access="hasAnyRole('USER', 'ADMIN')" />
         <intercept-url pattern="/**/reply" access="hasAnyRole('USER', 'ADMIN')" />
-        <intercept-url pattern="/admin**" access="hasRole(ROLE_ADMIN)" />
+        
         <form-login login-page="/login"
                     authentication-failure-url="/login?error"
                     username-parameter="username"
