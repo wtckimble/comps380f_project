@@ -50,7 +50,7 @@ public class LectureController {
     
     @RequestMapping(value = "reply/{ticketId}" , method = RequestMethod.GET)
     public ModelAndView reply(@PathVariable("ticketId") int ticketId) {
-        
+        System.out.println(ticketId);
         ModelAndView modelAndView = new ModelAndView("reply");
         modelAndView.addObject("replyForm", new replyForm());
         modelAndView.addObject("ticketId", ticketId);
@@ -73,7 +73,7 @@ public class LectureController {
     
     
     @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.POST)
-    public View reply(replyForm form, Principal principal, int ticketId) {
+    public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) {
         Reply reply = new Reply();
         reply.setCustomerName(principal.getName());
         reply.setTopicId(ticketId);
@@ -91,7 +91,7 @@ public class LectureController {
         replyRepo.createReply(reply);
 
         //this.ticketDatabase.put(ticket.getId(), ticket);
-        return new RedirectView("/lecture/reply/" + ticketId, true);
+        return new RedirectView("/lecture/view/" + ticketId, true);
     }
     
     
