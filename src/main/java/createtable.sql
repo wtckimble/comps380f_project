@@ -60,3 +60,24 @@ PRIMARY KEY (reply_id),
 FOREIGN KEY (topic_id) REFERENCES topic(topic_id)
 
 );
+ 
+CREATE TABLE POLL (
+    pollid INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
+    INCREMENT BY 1),
+    topic VARCHAR(50) NOT NULL,
+    optionone VARCHAR(50) NOT NULL,
+    optiontwo VARCHAR(50) NOT NULL,
+    optionthree VARCHAR(50) NOT NULL,
+    optionfour VARCHAR(50) NOT NULL,
+    PRIMARY KEY (pollid)
+);
+
+CREATE TABLE Vote (
+    voteid INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
+    INCREMENT BY 1),
+    pollid INTEGER NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    choice VARCHAR(50) NOT NULL,
+    PRIMARY KEY (voteid),
+    FOREIGN KEY (pollid) REFERENCES POLL(pollid)
+);

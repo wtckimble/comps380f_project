@@ -7,7 +7,7 @@
  * Author:  Kimble
  * Created: 2017年4月6日
  */
-
+/*
 CREATE TABLE users (
 
 username VARCHAR(50) NOT NULL,
@@ -43,3 +43,26 @@ INSERT INTO user_roles(username, role) VALUES ('keith', 'ROLE_ADMIN');
 INSERT INTO users VALUES ('maria', 'mariapw');
 
 INSERT INTO user_roles(username, role) VALUES ('maria', 'ROLE_USER');
+
+
+*/
+CREATE TABLE POLL (
+    pollid INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
+    INCREMENT BY 1),
+    topic VARCHAR(50) NOT NULL,
+    optionone VARCHAR(50) NOT NULL,
+    optiontwo VARCHAR(50) NOT NULL,
+    optionthree VARCHAR(50) NOT NULL,
+    optionfour VARCHAR(50) NOT NULL,
+    PRIMARY KEY (pollid)
+);
+
+CREATE TABLE Vote (
+    voteid INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
+    INCREMENT BY 1),
+    pollid VARCHAR(50) NOT NULL,
+    username VARCHAR(50) NOT NULL,
+    choice VARCHAR(50) NOT NULL,
+    PRIMARY KEY (voteid),
+    FOREIGN KEY (POLLID) REFERENCES POLL(POLLID)
+);
