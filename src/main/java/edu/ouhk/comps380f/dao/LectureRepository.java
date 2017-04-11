@@ -16,5 +16,5 @@ public interface LectureRepository {
     public void create(Lecture lecture);
     public List<Lecture> findAll();
     public Lecture findByLectureId(int id);
-    public void deleteByLectureId(long id);
+    public void deleteByLectureId(int id);
 }

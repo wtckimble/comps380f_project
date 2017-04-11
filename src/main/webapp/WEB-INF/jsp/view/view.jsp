@@ -4,7 +4,6 @@
         <title>Lecture view</title>
     </head>
     <body>
-        <<<<<<< HEAD
         <security:authorize access="isAuthenticated() ">
             Welcome, <security:authentication property="principal.username" />   <c:url var="logoutUrl" value="/logout"/>
             <form action="${logoutUrl}" method="post">

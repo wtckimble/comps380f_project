@@ -84,8 +84,8 @@ public class LectureRepositoryImpl implements LectureRepository{
     }
 
     @Override
-    public void deleteByLectureId(long id) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public void deleteByLectureId(int id) {
+        jdbcOp.update("delele from reply where topic_id = ?", id);
+        jdbcOp.update("delete from topic where topic_id = ?", id);
     }
-
 }

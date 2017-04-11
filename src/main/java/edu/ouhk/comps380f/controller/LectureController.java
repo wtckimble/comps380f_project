@@ -45,10 +45,9 @@ public class LectureController {
     public ModelAndView list(HttpServletRequest req, Principal principal) {
         ModelAndView mav = new ModelAndView("lecture");
         mav.addObject("lecturelist", lectureRepo.findAll());
-        if(req.getUserPrincipal() != null)
-            mav.addObject("username", principal.getName());
         return mav;
     }
+    
     @RequestMapping(value = "/lecture/reply/{ticketId}" , method = RequestMethod.GET)
     public ModelAndView reply(@PathVariable("ticketId") int ticketId) {
         
@@ -72,29 +71,11 @@ public class LectureController {
         return new ModelAndView("add", "ticketForm", new Form());
     }
     
-    /*@RequestMapping(value = "create", method = RequestMethod.POST)
-    public View reply(replyForm form, Principal principal) {
-        Lecture ticket = new Lecture();
-        ticket.setCustomerName(principal.getName());
-        ticket.setSubject(form.getSubject());
-        ticket.setBody(form.getBody());
-        
-        /*for (MultipartFile filePart : form.getAttachments()) {
-            Attachment attachment = new Attachment();
-            attachment.setName(filePart.getOriginalFilename());
-            attachment.setMimeContentType(filePart.getContentType());
-            attachment.setContents(filePart.getBytes());
-            if (attachment.getName() != null && attachment.getName().length() > 0
-                    && attachment.getContents() != null && attachment.getContents().length > 0) {
-                ticket.addAttachment(attachment);
-            }
-        }
-        lectureRepo.create(ticket);
-
-        /*this.ticketDatabase.put(ticket.getId(), ticket);
-        return new RedirectView("/lecture/view/" + ticket.getId(), true);
-    }*/
-    
+    @RequestMapping(value = "admin/delete/{ticket_id}", method = RequestMethod.GET)
+    public View deleteTopic(@PathVariable("ticketId") int ticketId) {
+        lectureRepo.deleteByLectureId(ticketId);
+        return new RedirectView("/lecture", true);
+    }
     
     public static class replyForm{
         
@@ -213,5 +194,6 @@ public class LectureController {
         }
         return new RedirectView("/ticket/list", true);
     }
-
+    
+    
 }
