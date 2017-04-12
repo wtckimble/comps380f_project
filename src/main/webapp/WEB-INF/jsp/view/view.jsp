@@ -43,11 +43,12 @@
                     ${entry.customerName}:
                     <p>
                     ${entry.body}
-                    </p>
+                    
                     <br/>
                     <security:authorize access="hasRole('ROLE_ADMIN') ">
-                            <a href="<c:url value="/lecture/delete/${entry.id}"/>">Delete</a>
+                            <a href="<c:url value="/lecture/view/${lectureInfo.id}/deleteReply/${entry.id}"/>">Delete</a>
                     </security:authorize>
+                    </p>
                     
                 </c:forEach>
 

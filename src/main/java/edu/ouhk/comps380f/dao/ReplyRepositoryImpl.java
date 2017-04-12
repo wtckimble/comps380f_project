@@ -63,6 +63,7 @@ public class ReplyRepositoryImpl implements ReplyRepository{
             Reply reply = new Reply();
             reply.setCustomerName((String)row.get("reply_author"));
             reply.setBody((String)row.get("reply_content"));
+            reply.setId((int)row.get("reply_id"));
             replys.add(reply);
         }
         return replys; 

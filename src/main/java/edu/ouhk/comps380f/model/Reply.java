@@ -13,6 +13,9 @@ import java.util.Map;
  * @author German
  */
 public class Reply {
+
+    
+    private int id;
     private String body;
     private String customerName;
     private int topicId;
@@ -48,6 +51,14 @@ public class Reply {
 
     public void setAttachments(Map<String, Attachment> attachments) {
         this.attachments = attachments;
+    }
+    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
     
 }
