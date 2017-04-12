@@ -6,7 +6,7 @@
 package edu.ouhk.comps380f.dao;
 
 import edu.ouhk.comps380f.model.Attachment;
-import edu.ouhk.comps380f.model.Lecture;
+import edu.ouhk.comps380f.model.Lab;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,8 +28,7 @@ import org.springframework.stereotype.Repository;
  * @author German
  */
 @Repository
-public class LectureRepositoryImpl implements LectureRepository {
-
+public class LabRepositoryImpl implements LabRepository{
     private DataSource dataSource;
     private JdbcOperations jdbcOp;
 
@@ -42,27 +41,27 @@ public class LectureRepositoryImpl implements LectureRepository {
     protected class ItemMapper implements RowMapper {
 
         public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Lecture lecture = new Lecture();
-            lecture.setId(rs.getInt("topic_id"));
-            lecture.setSubject(rs.getString("topic_title"));
-            return lecture;
+            Lab lab = new Lab();
+            lab.setId(rs.getInt("topic_id"));
+            lab.setSubject(rs.getString("topic_title"));
+            return lab;
         }
     }
 
     /**
      *
-     * @param lecture
+     * @param lab
      */
     @Override
-    public int createLecture(final Lecture lecture) {
+    public int createLab(final Lab lab) {
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcOp.update(new PreparedStatementCreator() {
             @Override
             public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
-                PreparedStatement ps = conn.prepareStatement("insert into topic (topic_title, topic_content, topic_author, topic_category) values (?, ?, ?, 'lecture')", new String[]{"topic_id"});
-                ps.setString(1, lecture.getSubject());
-                ps.setString(2, lecture.getBody());
-                ps.setString(3, lecture.getCustomerName());
+                PreparedStatement ps = conn.prepareStatement("insert into topic (topic_title, topic_content, topic_author, topic_category) values (?, ?, ?, 'lab')", new String[]{"topic_id"});
+                ps.setString(1, lab.getSubject());
+                ps.setString(2, lab.getBody());
+                ps.setString(3, lab.getCustomerName());
                 return ps;
             }
         }, keyHolder);
@@ -70,39 +69,39 @@ public class LectureRepositoryImpl implements LectureRepository {
     }
 
     @Override
-    public void createAttachment(Lecture lecture, int topicId) {
-        for (Attachment attachment : lecture.getAttachments()) {
+    public void createAttachment(Lab lab, int topicId) {
+        for (Attachment attachment : lab.getAttachments()) {
             jdbcOp.update("insert into attachments (name, content, mime, topic_id) values (?, ?, ?, ?)", attachment.getName(), attachment.getContents(), attachment.getMimeContentType(), topicId);
         }
     }
 
     @Override
-    public List<Lecture> findAll() {
-        List<Lecture> lectures = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ","lecture");
+    public List<Lab> findAll() {
+        List<Lab> labs = new ArrayList<>();
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ","lab");
         //String sql = "SELECT  topic_id, topic_title, topic_content, topic_author FROM topic";  
         for (Map<String, Object> row : rows) {
-            Lecture lecture = new Lecture();
-            lecture.setId((int) row.get("topic_id"));
-            lecture.setSubject((String) row.get("topic_title"));
-            lectures.add(lecture);
+            Lab lab = new Lab();
+            lab.setId((int) row.get("topic_id"));
+            lab.setSubject((String) row.get("topic_title"));
+            labs.add(lab);
         }
-        return lectures;
+        return labs;
 
     }
 
     @Override
-    public Lecture findByLectureId(int id) {
-        Lecture lecture = new Lecture();
+    public Lab findByLabId(int id) {
+        Lab lab = new Lab();
         List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT * FROM topic where topic_id = ? ", id);
         for (Map<String, Object> row : rows) {
-            lecture.setId((int) row.get("topic_id"));
-            lecture.setSubject((String) row.get("topic_subject"));
-            lecture.setCustomerName((String) row.get("topic_author"));
-            lecture.setBody((String) row.get("topic_content"));
+            lab.setId((int) row.get("topic_id"));
+            lab.setSubject((String) row.get("topic_subject"));
+            lab.setCustomerName((String) row.get("topic_author"));
+            lab.setBody((String) row.get("topic_content"));
         }
-        //System.out.println(lecture.getBody());
-        // System.out.println(lecture.getSubject());
+        //System.out.println(lab.getBody());
+        // System.out.println(lab.getSubject());
         List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where topic_id = ? ", id);
         for (Map<String, Object> attachmentRow : attachmentRows) {
             Attachment attachment = new Attachment();
@@ -110,13 +109,13 @@ public class LectureRepositoryImpl implements LectureRepository {
             attachment.setContents((byte[])attachmentRow.get("content"));
             attachment.setMimeContentType((String)attachmentRow.get("mime"));
             
-            lecture.addAttachment(attachment);
+            lab.addAttachment(attachment);
         }
-        return lecture;
+        return lab;
     }
 
     @Override
-    public void deleteByLectureId(int id) {
+    public void deleteByLabId(int id) {
         jdbcOp.update("delete from reply where topic_id = ?", id);
         jdbcOp.update("delete from topic where topic_id = ?", id);
     }

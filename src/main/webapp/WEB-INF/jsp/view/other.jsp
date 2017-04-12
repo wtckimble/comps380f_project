@@ -27,7 +27,7 @@
 
                 <c:forEach items="${otherlist}" var="entry">
                     ${entry.id}<br>
-                    <a href="<c:url value="/other/view/${entry.id}"/>">
+                    <a href="<c:url value="/other/view3/${entry.id}"/>">
                         <c:out value="${entry.subject}" /></a>  
                         <security:authorize access="hasRole('ROLE_ADMIN') ">
                             <a href="<c:url value="/other/delete/${entry.id}"/>">Delete</a>
@@ -40,7 +40,7 @@
                 <%--         
                <c:forEach items="${otherlist}" var="entry">
                    other Topics ${entry.value}: <br/>
-                   <a href="<c:url value="/other/view/${entry.key}" />">
+                   <a href="<c:url value="/other/view3/${entry.key}" />">
                        <c:out value="${entry.value}" /></a>
                </c:forEach>
                 --%>

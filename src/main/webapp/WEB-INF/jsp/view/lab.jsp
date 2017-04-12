@@ -27,7 +27,7 @@
 
                 <c:forEach items="${lablist}" var="entry">
                     ${entry.id}<br>
-                    <a href="<c:url value="/lab/view/${entry.id}"/>">
+                    <a href="<c:url value="/lab/view2/${entry.id}"/>">
                         <c:out value="${entry.subject}" /></a>  
                         <security:authorize access="hasRole('ROLE_ADMIN') ">
                             <a href="<c:url value="/lab/delete/${entry.id}"/>">Delete</a>
@@ -40,7 +40,7 @@
                 <%--         
                <c:forEach items="${lablist}" var="entry">
                    lab Topics ${entry.value}: <br/>
-                   <a href="<c:url value="/lab/view/${entry.key}" />">
+                   <a href="<c:url value="/lab/view2/${entry.key}" />">
                        <c:out value="${entry.value}" /></a>
                </c:forEach>
                 --%>

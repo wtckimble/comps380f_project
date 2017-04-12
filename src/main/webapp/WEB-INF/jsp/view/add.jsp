@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Add lecture</title>
+        <title>New Post</title>
     </head>
     <body>
-        <h2>Create a lecture</h2>
+        <h2>New Post</h2>
         
         <form:form method="POST" enctype="multipart/form-data"
                    modelAttribute="ticketForm">

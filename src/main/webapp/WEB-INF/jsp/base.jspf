@@ -1,4 +1,6 @@
 <%@ page import="edu.ouhk.comps380f.model.Lecture,
+                 edu.ouhk.comps380f.model.Lab,
+                 edu.ouhk.comps380f.model.Other,
                  edu.ouhk.comps380f.model.Attachment,
                  edu.ouhk.comps380f.model.User,
                  edu.ouhk.comps380f.model.Reply" %>

@@ -16,6 +16,8 @@ http://www.springframework.org/schema/security/spring-security.xsd">
     
     <b:bean id="userRepo" class="edu.ouhk.comps380f.dao.UserRepositoryImpl" />
     <b:bean id="lectureRepo" class="edu.ouhk.comps380f.dao.LectureRepositoryImpl" />
+    <b:bean id="labRepo" class="edu.ouhk.comps380f.dao.LabRepositoryImpl" />
+    <b:bean id="otherRepo" class="edu.ouhk.comps380f.dao.OtherRepositoryImpl" />
     <b:bean id="replyRepo" class="edu.ouhk.comps380f.dao.ReplyRepositoryImpl" />
     <b:bean id="attachmentRepo" class="edu.ouhk.comps380f.dao.AttachmentRepositoryImpl" />
     
