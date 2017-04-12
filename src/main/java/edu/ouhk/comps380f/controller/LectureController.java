@@ -69,20 +69,25 @@ public class LectureController {
 
         ModelAndView modelAndView = new ModelAndView("view");
         modelAndView.addObject("lectureInfo", lectureRepo.findByLectureId(ticketId));
+        modelAndView.addObject("replylist", replyRepo.findByTopicId(ticketId));
         return modelAndView;
     }
+    
+    
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public ModelAndView create() {
         return new ModelAndView("add", "ticketForm", new Form());
     }
-
-    @RequestMapping(value = "delete/{ticketId}", method = RequestMethod.GET)
-    public View delete(@PathVariable("ticketId") int id) {
-        lectureRepo.deleteByLectureId(id);
-        return new RedirectView("/lecture", true);
+    
+    
+    @RequestMapping(value = "view/{lectureId}/deleteReply/{replyId}", method = RequestMethod.GET)
+    public View deleteReply(@PathVariable("replyId") int replyId, @PathVariable("lectureId") int lectureId) {
+        replyRepo.deleteByReplyId(replyId);
+        return new RedirectView("/lecture/view/{lectureId}", true);
     }
-
+    
+    
     @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.POST)
     public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) {
         Reply reply = new Reply();

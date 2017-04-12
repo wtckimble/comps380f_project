@@ -2,6 +2,11 @@
 <html>
     <head>
         <title>Lecture view</title>
+        <style>
+            p{
+                text-indent: 50px;
+            }
+        </style>
     </head>
     <body>
         <security:authorize access="isAuthenticated() ">
@@ -27,6 +32,36 @@
                     <c:out value="${attachment.name}" /></a>
             </c:forEach><br /><br />
         </c:if>
+        --------------------------------------------------------------------------------------<br/><br/>
+        <c:choose>
+            <c:when test="${fn:length(replylist) == 0}">
+                <i>----------------------------</i><br/>
+            </c:when>
+            <c:otherwise>
+
+                <c:forEach items="${replylist}" var="entry">
+                    ${entry.customerName}:
+                    <p>
+                    ${entry.body}
+                    
+                    <br/>
+                    <security:authorize access="hasRole('ROLE_ADMIN') ">
+                            <a href="<c:url value="/lecture/view/${lectureInfo.id}/deleteReply/${entry.id}"/>">Delete</a>
+                    </security:authorize>
+                    </p>
+                    
+                </c:forEach>
+
+                <%--         
+               <c:forEach items="${lecturelist}" var="entry">
+                   Lecture Topics ${entry.value}: <br/>
+                   <a href="<c:url value="/lecture/view/${entry.key}" />">
+                       <c:out value="${entry.value}" /></a>
+               </c:forEach>
+                --%>
+            </c:otherwise>
+        </c:choose>
+        
         <a href="<c:url value="/lecture/reply/${ticketId}" />">Reply</a>   
         <a href="<c:url value="/lecture" />">Return to list tickets</a>
     </body>
