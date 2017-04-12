@@ -63,8 +63,11 @@ public class LectureController {
     
         ModelAndView modelAndView = new ModelAndView("view");
         modelAndView.addObject("lectureInfo", lectureRepo.findByLectureId(ticketId));
+        modelAndView.addObject("replylist", replyRepo.findByTopicId(ticketId));
         return modelAndView;
     }
+    
+    
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public ModelAndView create() {

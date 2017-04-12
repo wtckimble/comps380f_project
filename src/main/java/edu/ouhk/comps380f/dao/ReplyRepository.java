@@ -5,7 +5,9 @@
  */
 package edu.ouhk.comps380f.dao;
 
+import edu.ouhk.comps380f.model.Lecture;
 import edu.ouhk.comps380f.model.Reply;
+import java.util.List;
 
 /**
  *
@@ -13,4 +15,6 @@ import edu.ouhk.comps380f.model.Reply;
  */
 public interface ReplyRepository {
     public void createReply(Reply reply);
+    public List<Reply> findByTopicId(int id);
+    public void deleteByReplyId(int id);
 }
