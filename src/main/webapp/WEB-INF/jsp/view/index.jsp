@@ -23,7 +23,7 @@
             [<a href="<c:url value="/addpoll" />">Add new poll</a>]
         </security:authorize>
         <security:authorize access="hasRole('ROLE_ADMIN')">            
-            [<a href="<c:url value="/list" />">User list</a>]
+            [<a href="<c:url value="/userList" />">User list</a>]
         </security:authorize>
         <h3>Current Poll</h3>
         <c:choose>

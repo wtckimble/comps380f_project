@@ -6,16 +6,11 @@
 package edu.ouhk.comps380f.dao;
 
 import edu.ouhk.comps380f.model.User;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -91,7 +86,7 @@ public class UserRepositoryImpl implements UserRepository {
             String username = (String) row.get("username");
             user.setUsername(username);
             user.setPassword((String) row.get("password"));
-            List<Map<String, Object>> roleRows = jdbcOp.queryForList("select usename, role from user_roles where username = ?", username);
+            List<Map<String, Object>> roleRows = jdbcOp.queryForList("select username, role from user_roles where username = ?", username);
             for (Map<String, Object> roleRow : roleRows) {
                 user.addRole((String) roleRow.get("role"));
             }
@@ -158,4 +153,17 @@ public class UserRepositoryImpl implements UserRepository {
         jdbcOp.update("delete from user_roles where username = ?", username);
         jdbcOp.update("delete from users where username = ?", username);
     }
+    
+    @Override
+    public void UpdateByUser(User user) {  
+        if(!user.hasRole("ROLE_ADMIN")){
+            user.addRole("ROLE_ADMIN");
+            jdbcOp.update("UPDATE user_roles SET role = ? WHERE username = ?" , user.getRoles(), user.getUsername());
+        }
+              
+    }
+    
+    
+    
+    
 }

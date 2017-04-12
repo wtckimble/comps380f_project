@@ -25,6 +25,7 @@ import org.springframework.web.servlet.view.RedirectView;
 @Repository
 @RequestMapping("lecture")
 public class LectureController {
+    
     @Autowired
     public DataSource dataSource;
     public Statement stmt;

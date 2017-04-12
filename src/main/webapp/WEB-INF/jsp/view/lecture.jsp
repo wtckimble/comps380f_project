@@ -50,5 +50,6 @@
                 --%>
             </c:otherwise>
         </c:choose>
+        <a href="<c:url value="/" />">Back</a>
     </body>
 </html>

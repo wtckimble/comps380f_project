@@ -18,4 +18,5 @@ public interface UserRepository {
     public User findByUsername(String username);
     public void deleteByUsername(String username);
     public boolean  isUserExists(String username);
+    public void UpdateByUser(User user);
 }
