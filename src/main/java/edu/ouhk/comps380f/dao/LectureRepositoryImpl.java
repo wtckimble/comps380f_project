@@ -5,7 +5,10 @@
  */
 package edu.ouhk.comps380f.dao;
 
+import edu.ouhk.comps380f.model.Attachment;
 import edu.ouhk.comps380f.model.Lecture;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,7 +18,9 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -49,10 +54,26 @@ public class LectureRepositoryImpl implements LectureRepository {
      * @param lecture
      */
     @Override
-    public void create(Lecture lecture) {
-        jdbcOp.update("insert into topic (topic_title, topic_content, topic_author, topic_category) "
-                + "values (?, ?, ?, 'lecture')", lecture.getSubject(), lecture.getBody(), lecture.getCustomerName());
+    public int createLecture(final Lecture lecture) {
+        GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
+        jdbcOp.update(new PreparedStatementCreator() {
+            @Override
+            public PreparedStatement createPreparedStatement(Connection conn) throws SQLException {
+                PreparedStatement ps = conn.prepareStatement("insert into topic (topic_title, topic_content, topic_author, topic_category) values (?, ?, ?, 'lecture')", new String[]{"topic_id"});
+                ps.setString(1, lecture.getSubject());
+                ps.setString(2, lecture.getBody());
+                ps.setString(3, lecture.getCustomerName());
+                return ps;
+            }
+        }, keyHolder);
+        return keyHolder.getKey().intValue();
+    }
 
+    @Override
+    public void createAttachment(Lecture lecture, int topicId) {
+        for (Attachment attachment : lecture.getAttachments()) {
+            jdbcOp.update("insert into attachments (name, content, mime, topic_id) values (?, ?, ?, ?)", attachment.getName(), attachment.getContents(), attachment.getMimeContentType(), topicId);
+        }
     }
 
     @Override
@@ -80,8 +101,17 @@ public class LectureRepositoryImpl implements LectureRepository {
             lecture.setCustomerName((String) row.get("topic_author"));
             lecture.setBody((String) row.get("topic_content"));
         }
-        System.out.println(lecture.getBody());
-        System.out.println(lecture.getSubject());
+        //System.out.println(lecture.getBody());
+        // System.out.println(lecture.getSubject());
+        List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where topic_id = ? ", id);
+        for (Map<String, Object> attachmentRow : attachmentRows) {
+            Attachment attachment = new Attachment();
+            attachment.setName((String)attachmentRow.get("name"));
+            attachment.setContents((byte[])attachmentRow.get("content"));
+            attachment.setMimeContentType((String)attachmentRow.get("mime"));
+            
+            lecture.addAttachment(attachment);
+        }
         return lecture;
     }
 
