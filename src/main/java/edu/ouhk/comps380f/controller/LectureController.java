@@ -1,9 +1,13 @@
 package edu.ouhk.comps380f.controller;
 
+import edu.ouhk.comps380f.dao.AttachmentRepository;
 import edu.ouhk.comps380f.dao.LectureRepository;
 import edu.ouhk.comps380f.dao.ReplyRepository;
+import edu.ouhk.comps380f.model.Attachment;
 import edu.ouhk.comps380f.model.Lecture;
 import edu.ouhk.comps380f.model.Reply;
+import edu.ouhk.comps380f.view.DownloadingView;
+import java.io.IOException;
 import java.sql.Statement;
 import java.security.Principal;
 import java.util.LinkedHashMap;
@@ -25,18 +29,20 @@ import org.springframework.web.servlet.view.RedirectView;
 @Repository
 @RequestMapping("lecture")
 public class LectureController {
+
     @Autowired
     public DataSource dataSource;
     public Statement stmt;
-    
+
     @Autowired
     LectureRepository lectureRepo;
-    
-    
+
     @Autowired
     ReplyRepository replyRepo;
-    
-    
+
+    @Autowired
+    AttachmentRepository attachmentRepo;
+
     private volatile long TICKET_ID_SEQUENCE = 1;
     private Map<Long, Lecture> ticketDatabase = new LinkedHashMap<>();
 
@@ -47,20 +53,20 @@ public class LectureController {
         //mav.addObject("username", principal.getName());
         return mav;
     }
-    
-    @RequestMapping(value = "reply/{ticketId}" , method = RequestMethod.GET)
+
+    @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.GET)
     public ModelAndView reply(@PathVariable("ticketId") int ticketId) {
         System.out.println(ticketId);
         ModelAndView modelAndView = new ModelAndView("reply");
         modelAndView.addObject("replyForm", new replyForm());
         modelAndView.addObject("ticketId", ticketId);
         return modelAndView;
-   
+
     }
 
     @RequestMapping(value = "view/{ticketId}", method = RequestMethod.GET)
     public ModelAndView view(@PathVariable("ticketId") int ticketId) {
-    
+
         ModelAndView modelAndView = new ModelAndView("view");
         modelAndView.addObject("lectureInfo", lectureRepo.findByLectureId(ticketId));
         return modelAndView;
@@ -70,8 +76,13 @@ public class LectureController {
     public ModelAndView create() {
         return new ModelAndView("add", "ticketForm", new Form());
     }
-    
-    
+
+    @RequestMapping(value = "delete/{ticketId}", method = RequestMethod.GET)
+    public View delete(@PathVariable("ticketId") int id) {
+        lectureRepo.deleteByLectureId(id);
+        return new RedirectView("/lecture", true);
+    }
+
     @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.POST)
     public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) {
         Reply reply = new Reply();
@@ -93,10 +104,9 @@ public class LectureController {
         //this.ticketDatabase.put(ticket.getId(), ticket);
         return new RedirectView("/lecture/view/" + ticketId, true);
     }
-    
-    
-    public static class replyForm{
-        
+
+    public static class replyForm {
+
         private String body;
         private String customerName;
         private List<MultipartFile> attachments;
@@ -109,8 +119,7 @@ public class LectureController {
         public void setTopicId(int topicId) {
             this.topicId = topicId;
         }
-        
-        
+
         public String getBody() {
             return body;
         }
@@ -134,11 +143,8 @@ public class LectureController {
         public void setAttachments(List<MultipartFile> attachments) {
             this.attachments = attachments;
         }
-    
-        
-        
+
     }
-    
 
     public static class Form {
 
@@ -181,40 +187,41 @@ public class LectureController {
     }
 
     @RequestMapping(value = "create", method = RequestMethod.POST)
-    public View create(Form form, Principal principal) {
+    public View create(Form form, Principal principal) throws IOException {
         Lecture ticket = new Lecture();
         ticket.setCustomerName(principal.getName());
         ticket.setSubject(form.getSubject());
         ticket.setBody(form.getBody());
-        
-        /*for (MultipartFile filePart : form.getAttachments()) {
+
+        for (MultipartFile filePart : form.getAttachments()) {
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
             attachment.setMimeContentType(filePart.getContentType());
             attachment.setContents(filePart.getBytes());
             if (attachment.getName() != null && attachment.getName().length() > 0
                     && attachment.getContents() != null && attachment.getContents().length > 0) {
-                ticket.addAttachment(attachment);
-            }*/
-        
-        lectureRepo.create(ticket);
+                attachmentRepo.createLectureAttachment(attachment);
+            }
 
-        /*this.ticketDatabase.put(ticket.getId(), ticket);*/
-        return new RedirectView("/lecture/view/" + ticket.getId(), true);
+            //lectureRepo.create(ticket);
+            /*System.out.println(attachment.getName());
+            System.out.println(attachment.getContents());
+            System.out.println(attachment.getMimeContentType());*/
+
+ /*this.ticketDatabase.put(ticket.getId(), ticket);*/
+        }
+        return new RedirectView("/lecture", true);
     }
 
     private synchronized long getNextTicketId() {
         return this.TICKET_ID_SEQUENCE++;
     }
-    
-    /*
+
     @RequestMapping(
             value = "/{ticketId}/attachment/{attachment:.+}",
             method = RequestMethod.GET
     )
-    */
-    
-    /*
+
     public View download(@PathVariable("ticketId") long ticketId,
             @PathVariable("attachment") String name) {
         Lecture ticket = this.ticketDatabase.get(ticketId);
@@ -226,6 +233,6 @@ public class LectureController {
             }
         }
         return new RedirectView("/ticket/list", true);
-    }*/
+    }
 
 }

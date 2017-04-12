@@ -23,25 +23,27 @@ import org.springframework.stereotype.Repository;
  * @author German
  */
 @Repository
-public class LectureRepositoryImpl implements LectureRepository{
-    
+public class LectureRepositoryImpl implements LectureRepository {
+
     private DataSource dataSource;
     private JdbcOperations jdbcOp;
-       
+
     @Autowired
     public void setDataSource(DataSource dataSource) {
         this.dataSource = dataSource;
         this.jdbcOp = new JdbcTemplate(this.dataSource);
     }
-    protected class ItemMapper implements RowMapper {  
-  
-        public Object mapRow(ResultSet rs, int rowNum) throws SQLException {  
-            Lecture lecture = new Lecture();  
-            lecture.setId(rs.getInt("topic_id"));    
-            lecture.setSubject(rs.getString("topic_title"));    
-            return lecture;  
+
+    protected class ItemMapper implements RowMapper {
+
+        public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Lecture lecture = new Lecture();
+            lecture.setId(rs.getInt("topic_id"));
+            lecture.setSubject(rs.getString("topic_title"));
+            return lecture;
         }
-    }  
+    }
+
     /**
      *
      * @param lecture
@@ -50,7 +52,7 @@ public class LectureRepositoryImpl implements LectureRepository{
     public void create(Lecture lecture) {
         jdbcOp.update("insert into topic (topic_title, topic_content, topic_author, topic_category) "
                 + "values (?, ?, ?, 'lecture')", lecture.getSubject(), lecture.getBody(), lecture.getCustomerName());
-     
+
     }
 
     @Override
@@ -60,12 +62,12 @@ public class LectureRepositoryImpl implements LectureRepository{
         //String sql = "SELECT  topic_id, topic_title, topic_content, topic_author FROM topic";  
         for (Map<String, Object> row : rows) {
             Lecture lecture = new Lecture();
-            lecture.setId((int)row.get("topic_id"));
+            lecture.setId((int) row.get("topic_id"));
             lecture.setSubject((String) row.get("topic_title"));
             lectures.add(lecture);
         }
-        return lectures;  
-        
+        return lectures;
+
     }
 
     @Override
@@ -73,14 +75,14 @@ public class LectureRepositoryImpl implements LectureRepository{
         Lecture lecture = new Lecture();
         List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT * FROM topic where topic_id = ? ", id);
         for (Map<String, Object> row : rows) {
-            lecture.setId((int)row.get("topic_id"));
-            lecture.setSubject((String)row.get("topic_subject"));
-            lecture.setCustomerName((String)row.get("topic_author"));
-            lecture.setBody((String)row.get("topic_content"));         
+            lecture.setId((int) row.get("topic_id"));
+            lecture.setSubject((String) row.get("topic_subject"));
+            lecture.setCustomerName((String) row.get("topic_author"));
+            lecture.setBody((String) row.get("topic_content"));
         }
         System.out.println(lecture.getBody());
         System.out.println(lecture.getSubject());
-        return lecture; 
+        return lecture;
     }
 
     @Override
