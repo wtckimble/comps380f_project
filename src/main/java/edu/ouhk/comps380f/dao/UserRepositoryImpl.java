@@ -158,7 +158,7 @@ public class UserRepositoryImpl implements UserRepository {
     public void UpdateByUser(User user) {  
         if(!user.hasRole("ROLE_ADMIN")){
             user.addRole("ROLE_ADMIN");
-            jdbcOp.update("UPDATE user_roles SET role = ? WHERE username = ?" , user.getRoles(), user.getUsername());
+            jdbcOp.update("insert into user_roles (username, role) values (?, ?)" , user.getUsername(), user.getRoles().get(1));
         }
               
     }
