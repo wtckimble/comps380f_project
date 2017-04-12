@@ -205,10 +205,11 @@ public class LectureController {
             attachment.setContents(filePart.getBytes());
             if (attachment.getName() != null && attachment.getName().length() > 0
                     && attachment.getContents() != null && attachment.getContents().length > 0) {
-                attachmentRepo.createLectureAttachment(attachment);
+                ticket.addAttachment(attachment);
             }
 
-            //lectureRepo.create(ticket);
+            int topicId = lectureRepo.createLecture(ticket);
+            lectureRepo.createAttachment(ticket, topicId);
             /*System.out.println(attachment.getName());
             System.out.println(attachment.getContents());
             System.out.println(attachment.getMimeContentType());*/
@@ -222,16 +223,11 @@ public class LectureController {
         return this.TICKET_ID_SEQUENCE++;
     }
 
-    @RequestMapping(
-            value = "/{ticketId}/attachment/{attachment:.+}",
-            method = RequestMethod.GET
-    )
-
-    public View download(@PathVariable("ticketId") long ticketId,
-            @PathVariable("attachment") String name) {
-        Lecture ticket = this.ticketDatabase.get(ticketId);
-        if (ticket != null) {
-            Attachment attachment = ticket.getAttachment(name);
+    @RequestMapping(value = "download/{ticketId}/attachment/{attachment:.+}", method = RequestMethod.GET )
+    public View download(@PathVariable("ticketId") int ticketId, @PathVariable("attachment") String name) {
+        Lecture lecture = lectureRepo.findByLectureId(ticketId);
+        if (lecture != null) {
+            Attachment attachment = lecture.getAttachment(name);
             if (attachment != null) {
                 return new DownloadingView(attachment.getName(),
                         attachment.getMimeContentType(), attachment.getContents());

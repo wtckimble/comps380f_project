@@ -85,11 +85,12 @@ CREATE TABLE Vote (
 create table attachments (
     attachmentid INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
     INCREMENT BY 1),
-    name VARCHAR(50) NOT NULL,
-    content varchar(1024) NOT NULL,
+    name VARCHAR(100) NOT NULL,
+    content blob NOT NULL,
     mime VARCHAR(50) NOT NULL,
     reply_id INTEGER,
     topic_id INTEGER,
-    PRIMARY KEY (attachmentid)
-
+    PRIMARY KEY (attachmentid),
+    FOREIGN KEY (topic_id) references topic(topic_id),
+    foreign key(reply_id) references reply(reply_id)
 );

@@ -28,7 +28,7 @@
             <c:forEach items="${lectureInfo.attachments}" var="attachment"
                        varStatus="status">
                 <c:if test="${!status.first}">, </c:if>
-                <a href="<c:url value="/lecture/${lectureInfo.id}/attachment/${attachment.name}" />">
+                <a href="<c:url value="/lecture/download/${lectureInfo.id}/attachment/${attachment.name}" />">
                     <c:out value="${attachment.name}" /></a>
             </c:forEach><br /><br />
         </c:if>
