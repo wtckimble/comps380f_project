@@ -39,6 +39,8 @@
                             <a href="<c:url value="/lecture/delete/${entry.id}"/>">Delete</a>
                         </security:authorize>
                     <br/>
+                    --------------------------------------------------------------------------------------------------
+                    <br/>
                 </c:forEach>
 
                 <%--         

@@ -1,7 +1,13 @@
+<%-- 
+    Document   : view3
+    Created on : Apr 12, 2017, 10:38:25 PM
+    Author     : German
+--%>
+
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Lecture view</title>
+        <title>other view</title>
         <style>
             p{
                 text-indent: 50px;
@@ -20,15 +26,15 @@
             <a href="<c:url value="/login" />">Login</a>   
             <a href="<c:url value="/register" />">Register</a>
         </security:authorize><br><br>
-        <h2>Lecture #${lectureInfo.id}: <c:out value="${lectureInfo.subject}" /></h2>
-        <i>Customer Name - <c:out value="${lectureInfo.customerName}" /></i><br /><br />
-        <c:out value="${lectureInfo.body}" /><br /><br />
-        <c:if test="${lectureInfo.numberOfAttachments > 0}">
+        <h2>Other #${otherInfo.id}: <c:out value="${otherInfo.subject}" /></h2>
+        <i>Customer Name - <c:out value="${otherInfo.customerName}" /></i><br /><br />
+        <c:out value="${otherInfo.body}" /><br /><br />
+        <c:if test="${otherInfo.numberOfAttachments > 0}">
             Attachments:
-            <c:forEach items="${lectureInfo.attachments}" var="attachment"
+            <c:forEach items="${otherInfo.attachments}" var="attachment"
                        varStatus="status">
                 <c:if test="${!status.first}">, </c:if>
-                <a href="<c:url value="/lecture/${lectureInfo.id}/attachment/${attachment.name}" />">
+                <a href="<c:url value="/other/${otherInfo.id}/attachment/${attachment.name}" />">
                     <c:out value="${attachment.name}" /></a>
             </c:forEach><br /><br />
         </c:if>
@@ -46,7 +52,7 @@
                     
                     <br/>
                     <security:authorize access="hasRole('ROLE_ADMIN') ">
-                            <a href="<c:url value="/lecture/view/${lectureInfo.id}/deleteReply/${entry.id}"/>">Delete</a>
+                            <a href="<c:url value="/other/view3/${otherInfo.id}/deleteReply/${entry.id}"/>">Delete</a>
                     </security:authorize>
                     </p>
                     
@@ -54,7 +60,8 @@
             </c:otherwise>
         </c:choose>
         
-        <a href="<c:url value="/lecture/reply/${ticketId}" />">Reply</a>   
-        <a href="<c:url value="/lecture" />">Back</a>
+        <a href="<c:url value="/other/reply/${ticketId}" />">Reply</a>   
+        <a href="<c:url value="/other" />">Back</a>
     </body>
 </html>
+
