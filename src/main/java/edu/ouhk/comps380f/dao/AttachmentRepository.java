@@ -7,15 +7,13 @@ package edu.ouhk.comps380f.dao;
 
 import edu.ouhk.comps380f.model.Attachment;
 import edu.ouhk.comps380f.model.Lecture;
-import java.util.List;
+import edu.ouhk.comps380f.model.Reply;
 
 /**
  *
- * @author German
+ * @author Kimble
  */
-public interface LectureRepository {
-    public void create(Lecture lecture);
-    public List<Lecture> findAll();
-    public Lecture findByLectureId(int id);
-    public void deleteByLectureId(int id);
+public interface AttachmentRepository {
+    public void createLectureAttachment(Attachment attachment);
+    public void createReplyAttachment(Reply reply, Attachment attachment);
 }

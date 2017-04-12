@@ -81,3 +81,15 @@ CREATE TABLE Vote (
     PRIMARY KEY (voteid),
     FOREIGN KEY (pollid) REFERENCES POLL(pollid)
 );
+
+create table attachments (
+    attachmentid INTEGER NOT NULL GENERATED ALWAYS AS IDENTITY (START WITH 1,
+    INCREMENT BY 1),
+    name VARCHAR(50) NOT NULL,
+    content varchar(1024) NOT NULL,
+    mime VARCHAR(50) NOT NULL,
+    reply_id INTEGER,
+    topic_id INTEGER,
+    PRIMARY KEY (attachmentid)
+
+);
