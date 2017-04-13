@@ -106,10 +106,10 @@ public class LectureRepositoryImpl implements LectureRepository {
         List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where topic_id = ? ", id);
         for (Map<String, Object> attachmentRow : attachmentRows) {
             Attachment attachment = new Attachment();
-            attachment.setName((String)attachmentRow.get("name"));
-            attachment.setContents((byte[])attachmentRow.get("content"));
-            attachment.setMimeContentType((String)attachmentRow.get("mime"));
-            
+            attachment.setName((String) attachmentRow.get("name"));
+            attachment.setContents((byte[]) attachmentRow.get("content"));
+            attachment.setMimeContentType((String) attachmentRow.get("mime"));
+
             lecture.addAttachment(attachment);
         }
         return lecture;
@@ -117,6 +117,7 @@ public class LectureRepositoryImpl implements LectureRepository {
 
     @Override
     public void deleteByLectureId(int id) {
+        jdbcOp.update("delete from attachments where topic_id = ?", id);
         jdbcOp.update("delete from reply where topic_id = ?", id);
         jdbcOp.update("delete from topic where topic_id = ?", id);
     }

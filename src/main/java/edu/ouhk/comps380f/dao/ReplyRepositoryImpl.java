@@ -93,9 +93,9 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     }
 
     @Override
-    public void createAttachment(Reply reply, int replyId) {
+    public void createAttachment(Reply reply, int replyId, int topicId) {
         for (Attachment attachment : reply.getAttachments()) {
-            jdbcOp.update("insert into attachments (name, content, mime, reply_id) values (?, ?, ?, ?)", attachment.getName(), attachment.getContents(), attachment.getMimeContentType(), replyId);
+            jdbcOp.update("insert into attachments (name, content, mime, reply_id, topic_id) values (?, ?, ?, ?, ?)", attachment.getName(), attachment.getContents(), attachment.getMimeContentType(), replyId, topicId);
         }
     }
 
@@ -125,6 +125,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
 
     @Override
     public void deleteByReplyId(int id) {
+        jdbcOp.update("delete from attachments where reply_id = ?", id);
         jdbcOp.update("delete from reply where reply_id = ?", id);
     }
 

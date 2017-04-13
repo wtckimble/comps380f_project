@@ -34,7 +34,7 @@
             <c:forEach items="${labInfo.attachments}" var="attachment"
                        varStatus="status">
                 <c:if test="${!status.first}">, </c:if>
-                <a href="<c:url value="/lab/${labInfo.id}/attachment/${attachment.name}" />">
+                <a href="<c:url value="/lab/download/${labInfo.id}/attachment/${attachment.name}" />">
                     <c:out value="${attachment.name}" /></a>
             </c:forEach><br /><br />
         </c:if>
@@ -48,18 +48,27 @@
                 <c:forEach items="${replylist}" var="entry">
                     ${entry.customerName}:
                     <p>
-                    ${entry.body}
-                    
-                    <br/>
-                    <security:authorize access="hasRole('ROLE_ADMIN') ">
+                        ${entry.body}
+
+                        <br/>
+                        <c:if test="${entry.numberOfAttachments > 0}">
+                            Attachments:
+                            <c:forEach items="${entry.attachments}" var="attachment"
+                                       varStatus="status">
+                                <c:if test="${!status.first}">, </c:if>
+                                <a href="<c:url value="/lab/download/${labInfo.id}/${entry.id}/attachment/${attachment.name}" />">
+                                    <c:out value="${attachment.name}" /></a>
+                            </c:forEach><br /><br />
+                        </c:if>
+                        <security:authorize access="hasRole('ROLE_ADMIN') ">
                             <a href="<c:url value="/lab/view2/${labInfo.id}/deleteReply/${entry.id}"/>">Delete</a>
-                    </security:authorize>
+                        </security:authorize>
                     </p>
-                    
+
                 </c:forEach>
             </c:otherwise>
         </c:choose>
-        
+
         <a href="<c:url value="/lab/reply/${ticketId}" />">Reply</a>   
         <a href="<c:url value="/lab" />">Back</a>
     </body>

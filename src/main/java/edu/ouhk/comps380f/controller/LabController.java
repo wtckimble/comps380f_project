@@ -72,29 +72,32 @@ public class LabController {
         modelAndView.addObject("replylist", replyRepo.findByTopicId(ticketId));
         return modelAndView;
     }
-    
-    
 
     @RequestMapping(value = "create", method = RequestMethod.GET)
     public ModelAndView create() {
         return new ModelAndView("add", "ticketForm", new Form());
     }
-    
-    
+
+    @RequestMapping(value = "delete/{ticketId}", method = RequestMethod.GET)
+    public View deleteTicket(@PathVariable("ticketId") int ticketId) {
+        labRepo.deleteByLabId(ticketId);
+
+        return new RedirectView("/lab", true);
+    }
+
     @RequestMapping(value = "view2/{labId}/deleteReply/{replyId}", method = RequestMethod.GET)
     public View deleteReply(@PathVariable("replyId") int replyId, @PathVariable("labId") int labId) {
         replyRepo.deleteByReplyId(replyId);
         return new RedirectView("/lab/view2/{labId}", true);
     }
-    
-    
+
     @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.POST)
-    public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) {
+    public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) throws IOException {
         Reply reply = new Reply();
         reply.setCustomerName(principal.getName());
         reply.setTopicId(ticketId);
         reply.setBody(form.getBody());
-        /*
+
         for (MultipartFile filePart : form.getAttachments()) {
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
@@ -102,10 +105,12 @@ public class LabController {
             attachment.setContents(filePart.getBytes());
             if (attachment.getName() != null && attachment.getName().length() > 0
                     && attachment.getContents() != null && attachment.getContents().length > 0) {
-                ticket.addAttachment(attachment);
-            }*/
-        replyRepo.createReply(reply);
+                reply.addAttachment(attachment);
+            }
 
+            int replyId = replyRepo.createReply(reply);
+            replyRepo.createAttachment(reply, replyId, ticketId);
+        }
         //this.ticketDatabase.put(ticket.getId(), ticket);
         return new RedirectView("/lab/view2/" + ticketId, true);
     }
@@ -223,11 +228,36 @@ public class LabController {
         return this.TICKET_ID_SEQUENCE++;
     }
 
-    @RequestMapping(value = "download/{ticketId}/attachment/{attachment:.+}", method = RequestMethod.GET )
+    /*@RequestMapping(value = "download/{ticketId}/attachment/{attachment:.+}", method = RequestMethod.GET )
     public View download(@PathVariable("ticketId") int ticketId, @PathVariable("attachment") String name) {
         Lab lab = labRepo.findByLabId(ticketId);
         if (lab != null) {
             Attachment attachment = lab.getAttachment(name);
+            if (attachment != null) {
+                return new DownloadingView(attachment.getName(),
+                        attachment.getMimeContentType(), attachment.getContents());
+            }
+        }
+        return new RedirectView("/ticket/list", true);
+    }*/
+    @RequestMapping(value = "download/{ticketId}/attachment/{attachment:.+}", method = RequestMethod.GET)
+    public View download(@PathVariable("ticketId") int ticketId, @PathVariable("attachment") String name) {
+        Lab lab = labRepo.findByLabId(ticketId);
+        if (lab != null) {
+            Attachment attachment = lab.getAttachment(name);
+            if (attachment != null) {
+                return new DownloadingView(attachment.getName(),
+                        attachment.getMimeContentType(), attachment.getContents());
+            }
+        }
+        return new RedirectView("/ticket/list", true);
+    }
+
+    @RequestMapping(value = "download/{ticketId}/{replyId}/attachment/{attachment:.+}", method = RequestMethod.GET)
+    public View downloadReplyAttachment(@PathVariable("ticketId") int ticketId, @PathVariable("replyId") int replyId, @PathVariable("attachment") String name) {
+        Reply reply = replyRepo.findByReplyId(replyId);
+        if (reply != null) {
+            Attachment attachment = reply.getAttachment(name);
             if (attachment != null) {
                 return new DownloadingView(attachment.getName(),
                         attachment.getMimeContentType(), attachment.getContents());

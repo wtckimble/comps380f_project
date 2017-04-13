@@ -78,6 +78,13 @@ public class LectureController {
         return new ModelAndView("add", "ticketForm", new Form());
     }
 
+    @RequestMapping(value = "delete/{ticketId}", method = RequestMethod.GET)
+    public View deleteTicket(@PathVariable("ticketId") int ticketId) {
+        lectureRepo.deleteByLectureId(ticketId);
+
+        return new RedirectView("/lecture", true);
+    }
+
     @RequestMapping(value = "view/{lectureId}/deleteReply/{replyId}", method = RequestMethod.GET)
     public View deleteReply(@PathVariable("replyId") int replyId, @PathVariable("lectureId") int lectureId) {
         replyRepo.deleteByReplyId(replyId);
@@ -102,7 +109,7 @@ public class LectureController {
             }
 
             int replyId = replyRepo.createReply(reply);
-            replyRepo.createAttachment(reply, replyId);
+            replyRepo.createAttachment(reply, replyId, ticketId);
         }
         //int replyId = replyRepo.createReply(reply);
         //System.out.println(replyId);

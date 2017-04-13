@@ -28,7 +28,8 @@ import org.springframework.stereotype.Repository;
  * @author German
  */
 @Repository
-public class LabRepositoryImpl implements LabRepository{
+public class LabRepositoryImpl implements LabRepository {
+
     private DataSource dataSource;
     private JdbcOperations jdbcOp;
 
@@ -78,7 +79,7 @@ public class LabRepositoryImpl implements LabRepository{
     @Override
     public List<Lab> findAll() {
         List<Lab> labs = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ","lab");
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ", "lab");
         //String sql = "SELECT  topic_id, topic_title, topic_content, topic_author FROM topic";  
         for (Map<String, Object> row : rows) {
             Lab lab = new Lab();
@@ -105,10 +106,10 @@ public class LabRepositoryImpl implements LabRepository{
         List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where topic_id = ? ", id);
         for (Map<String, Object> attachmentRow : attachmentRows) {
             Attachment attachment = new Attachment();
-            attachment.setName((String)attachmentRow.get("name"));
-            attachment.setContents((byte[])attachmentRow.get("content"));
-            attachment.setMimeContentType((String)attachmentRow.get("mime"));
-            
+            attachment.setName((String) attachmentRow.get("name"));
+            attachment.setContents((byte[]) attachmentRow.get("content"));
+            attachment.setMimeContentType((String) attachmentRow.get("mime"));
+
             lab.addAttachment(attachment);
         }
         return lab;
@@ -116,6 +117,7 @@ public class LabRepositoryImpl implements LabRepository{
 
     @Override
     public void deleteByLabId(int id) {
+        jdbcOp.update("delete from attachments where topic_id = ?", id);
         jdbcOp.update("delete from reply where topic_id = ?", id);
         jdbcOp.update("delete from topic where topic_id = ?", id);
     }

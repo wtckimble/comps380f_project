@@ -79,7 +79,7 @@ public class OtherRepositoryImpl implements OtherRepository {
     @Override
     public List<Other> findAll() {
         List<Other> others = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ","other");
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ", "other");
         //String sql = "SELECT  topic_id, topic_title, topic_content, topic_author FROM topic";  
         for (Map<String, Object> row : rows) {
             Other other = new Other();
@@ -106,10 +106,10 @@ public class OtherRepositoryImpl implements OtherRepository {
         List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where topic_id = ? ", id);
         for (Map<String, Object> attachmentRow : attachmentRows) {
             Attachment attachment = new Attachment();
-            attachment.setName((String)attachmentRow.get("name"));
-            attachment.setContents((byte[])attachmentRow.get("content"));
-            attachment.setMimeContentType((String)attachmentRow.get("mime"));
-            
+            attachment.setName((String) attachmentRow.get("name"));
+            attachment.setContents((byte[]) attachmentRow.get("content"));
+            attachment.setMimeContentType((String) attachmentRow.get("mime"));
+
             other.addAttachment(attachment);
         }
         return other;
@@ -117,6 +117,7 @@ public class OtherRepositoryImpl implements OtherRepository {
 
     @Override
     public void deleteByOtherId(int id) {
+        jdbcOp.update("delete from attachments where topic_id = ?", id);
         jdbcOp.update("delete from reply where topic_id = ?", id);
         jdbcOp.update("delete from topic where topic_id = ?", id);
     }
