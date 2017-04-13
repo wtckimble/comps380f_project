@@ -53,10 +53,12 @@ public class Reply {
         return this.attachments.values();
     }
 
-    
-
     public void addAttachment(Attachment attachment) {
         this.attachments.put(attachment.getName(), attachment);
+    }
+
+    public int getNumberOfAttachments() {
+        return this.attachments.size();
     }
 
     public int getId() {

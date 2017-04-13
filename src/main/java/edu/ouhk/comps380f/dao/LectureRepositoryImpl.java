@@ -79,7 +79,7 @@ public class LectureRepositoryImpl implements LectureRepository {
     @Override
     public List<Lecture> findAll() {
         List<Lecture> lectures = new ArrayList<>();
-        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = ? ","lecture");
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT topic_id, topic_title FROM topic WHERE topic_category = 'lecture'");
         //String sql = "SELECT  topic_id, topic_title, topic_content, topic_author FROM topic";  
         for (Map<String, Object> row : rows) {
             Lecture lecture = new Lecture();

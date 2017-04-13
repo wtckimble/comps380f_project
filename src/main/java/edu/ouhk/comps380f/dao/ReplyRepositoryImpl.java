@@ -41,6 +41,29 @@ public class ReplyRepositoryImpl implements ReplyRepository {
         this.jdbcOp = new JdbcTemplate(this.dataSource);
     }
 
+    @Override
+    public Reply findByReplyId(int id) {
+        Reply reply = new Reply();
+        List<Map<String, Object>> rows = jdbcOp.queryForList("SELECT * FROM reply where reply_id = ? ", id);
+        for (Map<String, Object> row : rows) {
+            reply.setId((int) row.get("reply_id"));
+            reply.setCustomerName((String) row.get("reply_author"));
+            reply.setBody((String) row.get("reply_content"));
+        }
+        //System.out.println(lecture.getBody());
+        // System.out.println(lecture.getSubject());
+        List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where reply_id = ? ", id);
+        for (Map<String, Object> attachmentRow : attachmentRows) {
+            Attachment attachment = new Attachment();
+            attachment.setName((String) attachmentRow.get("name"));
+            attachment.setContents((byte[]) attachmentRow.get("content"));
+            attachment.setMimeContentType((String) attachmentRow.get("mime"));
+
+            reply.addAttachment(attachment);
+        }
+        return reply;
+    }
+
     protected class ItemMapper implements RowMapper {
 
         public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -73,7 +96,7 @@ public class ReplyRepositoryImpl implements ReplyRepository {
     public void createAttachment(Reply reply, int replyId) {
         for (Attachment attachment : reply.getAttachments()) {
             jdbcOp.update("insert into attachments (name, content, mime, reply_id) values (?, ?, ?, ?)", attachment.getName(), attachment.getContents(), attachment.getMimeContentType(), replyId);
-        } 
+        }
     }
 
     @Override
@@ -87,6 +110,15 @@ public class ReplyRepositoryImpl implements ReplyRepository {
             reply.setBody((String) row.get("reply_content"));
             reply.setId((int) row.get("reply_id"));
             replys.add(reply);
+            List<Map<String, Object>> attachmentRows = jdbcOp.queryForList("SELECT * FROM attachments where reply_id = ? ", row.get("reply_id"));
+
+            for (Map<String, Object> attachmentRow : attachmentRows) {
+                Attachment attachment = new Attachment();
+                attachment.setName((String) attachmentRow.get("name"));
+                attachment.setContents((byte[]) attachmentRow.get("content"));
+                attachment.setMimeContentType((String) attachmentRow.get("mime"));
+                reply.addAttachment(attachment);
+            }
         }
         return replys;
     }
