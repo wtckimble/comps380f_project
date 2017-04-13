@@ -5,6 +5,7 @@
  */
 package edu.ouhk.comps380f.model;
 
+import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -14,7 +15,6 @@ import java.util.Map;
  */
 public class Reply {
 
-    
     private int id;
     private String body;
     private String customerName;
@@ -45,14 +45,20 @@ public class Reply {
         this.topicId = topicId;
     }
 
-    public Map<String, Attachment> getAttachments() {
-        return attachments;
+    public Attachment getAttachment(String name) {
+        return this.attachments.get(name);
     }
 
-    public void setAttachments(Map<String, Attachment> attachments) {
-        this.attachments = attachments;
+    public Collection<Attachment> getAttachments() {
+        return this.attachments.values();
     }
+
     
+
+    public void addAttachment(Attachment attachment) {
+        this.attachments.put(attachment.getName(), attachment);
+    }
+
     public int getId() {
         return id;
     }
@@ -60,6 +66,5 @@ public class Reply {
     public void setId(int id) {
         this.id = id;
     }
-    
-}
 
+}

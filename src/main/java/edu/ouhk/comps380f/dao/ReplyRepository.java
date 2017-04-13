@@ -14,7 +14,8 @@ import java.util.List;
  * @author German
  */
 public interface ReplyRepository {
-    public void createReply(Reply reply);
+    public int createReply(Reply reply);
+    public void createAttachment(Reply replay, int replyId);
     public List<Reply> findByTopicId(int id);
     public void deleteByReplyId(int id);
 }

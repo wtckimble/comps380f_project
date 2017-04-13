@@ -56,7 +56,7 @@ public class LectureController {
 
     @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.GET)
     public ModelAndView reply(@PathVariable("ticketId") int ticketId) {
-        System.out.println(ticketId);
+        //System.out.println(ticketId);
         ModelAndView modelAndView = new ModelAndView("reply");
         modelAndView.addObject("replyForm", new replyForm());
         modelAndView.addObject("ticketId", ticketId);
@@ -89,12 +89,12 @@ public class LectureController {
     
     
     @RequestMapping(value = "reply/{ticketId}", method = RequestMethod.POST)
-    public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) {
+    public View reply(@PathVariable("ticketId") int ticketId, replyForm form, Principal principal) throws IOException {
         Reply reply = new Reply();
         reply.setCustomerName(principal.getName());
-        reply.setTopicId(ticketId);
         reply.setBody(form.getBody());
-        /*
+        reply.setTopicId(ticketId);
+
         for (MultipartFile filePart : form.getAttachments()) {
             Attachment attachment = new Attachment();
             attachment.setName(filePart.getOriginalFilename());
@@ -102,11 +102,14 @@ public class LectureController {
             attachment.setContents(filePart.getBytes());
             if (attachment.getName() != null && attachment.getName().length() > 0
                     && attachment.getContents() != null && attachment.getContents().length > 0) {
-                ticket.addAttachment(attachment);
-            }*/
-        replyRepo.createReply(reply);
+                reply.addAttachment(attachment);
+            }
 
-        //this.ticketDatabase.put(ticket.getId(), ticket);
+            int replyId = replyRepo.createReply(reply);
+            replyRepo.createAttachment(reply, replyId);
+        }
+        //int replyId = replyRepo.createReply(reply);
+        //System.out.println(replyId);
         return new RedirectView("/lecture/view/" + ticketId, true);
     }
 
